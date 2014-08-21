@@ -1,5 +1,7 @@
 # JCF - JavaScript Custom Forms
 
+Check live [demo](http://inferpse.github.io/jcf/)
+
 ## Browser support
 
 The script was tested in the following browsers:

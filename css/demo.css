@@ -48,6 +48,10 @@ main h2 {
 	padding: 7px 0;
 	border-bottom: 1px dotted #ccc;
 }
+main h3 {
+	font-size: 16px;
+	margin: 0 0 10px;
+}
 main p {
 	margin: 0 0 10px;
 }
@@ -145,21 +149,18 @@ section:after {
 	margin-top: 15px;
 }
 .demo-scrollbars .test {
-	background: #fee;
+	background: #f5f55;
 	overflow: auto;
 	float: left;
 	width: 50%;
 	height: 300px;
-	padding: 20px 0 0;
-}
-.demo-scrollbars .test p {
-	border: 1px solid #00f;
-	border-width: 0 1px;
+	padding: 0;
 }
 .demo-scrollbars .test img {
 	display: block;
 	max-width: 100%;
 	height: auto;
+	margin: 0 0 10px;
 }
 
 @media only screen and (max-width:1000px) {
