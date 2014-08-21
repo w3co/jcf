@@ -61,7 +61,7 @@
 
 			// add event handlers
 			this.realElement.on('scroll', this.onScroll);
-			this.win.on('resize orientationchange', this.onResize);
+			this.win.on('resize orientationchange load', this.onResize);
 
 			// add pointer/wheel event handlers
 			this.realElement.on('jcf-mousewheel', this.onMouseWheel);
@@ -297,6 +297,9 @@
 				viewSize = this.embeddedDimensions.innerWidth;
 				maxScrollValue = this.realElement.prop('scrollWidth');
 
+				if(maxScrollValue === viewSize) {
+					this.horizontalScrollActive = false;
+				}
 				this.hBar.show().setMaxValue(maxScrollValue - viewSize).setRatio(viewSize / maxScrollValue).setSize(viewSize);
 				this.hBar.setValue(this.realElement.scrollLeft());
 			} else {
@@ -319,7 +322,7 @@
 		},	
 		destroy: function() {
 			// remove event listeners
-			this.win.off('resize orientationchange', this.onResize);
+			this.win.off('resize orientationchange load', this.onResize);
 			this.realElement.off({
 				'jcf-mousewheel': this.onMouseWheel,
 				'jcf-pointerdown': this.onTouchBody
