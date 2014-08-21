@@ -39,4 +39,4 @@ $(function() {
 
 This script is licensed under the [MIT License](LICENSE.txt).
 
-Copyright 2014 [PSD2HTML](http://psd2html.com)
+Copyright 2014 [PSD2HTML.com](http://psd2html.com)
