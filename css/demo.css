@@ -1,0 +1,183 @@
+/* reset styles */
+body {
+	font:14px/19px Arial, Helvetica, sans-serif;
+	background:#f5f5f5 url(../images/bg-body.jpg);
+	color:#000;
+	margin:0;
+}
+img {border-style:none;}
+a {
+	text-decoration:none;
+	outline:none;
+	color:#3782b3;
+}
+a:hover {text-decoration:underline;}
+a:active {background-color: transparent;}
+input,
+textarea,
+select {
+	font:100% Arial, Helvetica, sans-serif;
+	vertical-align:middle;
+	outline:none;
+	color:#000;
+}
+form, fieldset {
+	border-style:none;
+	margin:0;
+	padding:0;
+}
+/* layout styles */
+main {
+	border: 1px solid #777;
+	border-width: 0 1px;
+	background: #fff;
+	display: block;
+	margin: 0 auto;
+	padding: 30px;
+	width: 938px;
+}
+main section {
+	margin: 0 0 20px;
+}
+main h1 {
+	font-size: 26px;
+	margin: 0 0 10px;
+}
+main h2 {
+	font-size: 20px;
+	padding: 7px 0;
+	border-bottom: 1px dotted #ccc;
+}
+main p {
+	margin: 0 0 10px;
+}
+main pre {
+	border: 1px solid #aaa;
+	padding: 10px;
+	background: #f5f5f5;
+	margin: 0 0 10px;
+}
+main code {
+	border: 1px solid #ddd;
+	border-radius: 2px;
+	background: #f5f5f5;
+	padding: 1px 2px;
+}
+section:after {
+	display: block;
+	clear: both;
+	content: '';
+}
+.col {
+	padding: 0 30px 0 0;
+	float: left;
+}
+.row {
+	vertical-align: top;
+	padding: 0 0 15px;
+}
+.row:after {
+	display: block;
+	clear: both;
+	content: '';
+}
+.row label {
+	display: inline-block;
+	vertical-align: top;
+	line-height: 26px;
+	margin: 0 5px 0 0;
+}
+@media only screen and (max-width:1000px) {
+	main {
+		border: none;
+		width: auto;
+		margin: 0;
+	}
+}
+
+/* textarea styles */
+.col textarea {
+	width: 260px;
+	height: 165px;
+	max-width: 350px;
+	max-height: 400px;
+	min-width: 200px;
+	min-height: 100px;
+}
+
+/* label demo styles */
+.jcf-label-active {
+	font-weight: bold;
+}
+
+/* select demo styles */
+.jcf-select-color .jcf-select-text .jcf-option-color {font-weight: bold;}
+.jcf-select-text .jcf-option-red, .jcf-list .jcf-option-red {color: #d00;}
+.jcf-select-text .jcf-option-green, .jcf-list .jcf-option-green {color: #0d0;}
+.jcf-select-text .jcf-option-blue, .jcf-list .jcf-option-blue {color: #00d;}
+.jcf-select-drop .jcf-option-hideme {display: none;}
+
+.jcf-select.jcf-select-present {
+	line-height: 48px;
+	height: 48px;
+	background: #fff;
+}
+.jcf-select.jcf-select-present .jcf-select-text img {
+	vertical-align: top;
+	width: 32px;
+	height: auto;
+	margin: 7px 5px 0 0;
+}
+.jcf-select-present .jcf-select-text {
+	line-height: 48px;
+}
+.jcf-select-present .jcf-list {
+	font-style: italic;
+	line-height: 48px;
+}
+.jcf-select-present .jcf-list img {
+	vertical-align: middle;
+	margin: 0 5px 0 0;
+}
+
+/* scroll area styles */
+.jcf-textarea {
+	margin-top: 15px;
+}
+.demo-scrollbars .test {
+	background: #fee;
+	overflow: auto;
+	float: left;
+	width: 50%;
+	height: 300px;
+	padding: 20px 0 0;
+}
+.demo-scrollbars .test p {
+	border: 1px solid #00f;
+	border-width: 0 1px;
+}
+.demo-scrollbars .test img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+@media only screen and (max-width:1000px) {
+	.demo-scrollbars .test {
+		height: 300px;
+	}
+	.demo-scrollbars .test img {
+		max-width: none;
+	}
+}
+@media only screen and (max-width:600px) {
+	.demo-scrollbars .test {
+		font-size: 11px;
+		height: 300px;
+	}
+	.demo-scrollbars .test img {
+		margin: 0 auto;
+		width: 75px;
+		height: auto;
+	}
+}

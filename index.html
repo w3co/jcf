@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, maximum-scale=1.0">
+	<meta charset="utf-8">
+	<title>JavaScript Custom Forms</title>
+
+	<!-- jcf scripts and styles -->
+	<link rel="stylesheet" href="css/theme-css3/jcf.css">
+	<script src="js/jquery-1.11.1.js"></script>
+	<script src="js/jcf.js"></script>
+	<script src="js/jcf.file.js"></script>
+	<script src="js/jcf.radio.js"></script>
+	<script src="js/jcf.button.js"></script>
+	<script src="js/jcf.select.js"></script>
+	<script src="js/jcf.checkbox.js"></script>
+	<script src="js/jcf.textarea.js"></script>
+	<script src="js/jcf.scrollable.js"></script>
+	<script>
+		$(window).on('load', function() {
+			jcf.replaceAll();
+		});
+	</script>
+
+	<!-- demo page styles -->
+	<link rel="stylesheet" href="css/demo.css">
+	<!--[if IE]><script type="text/javascript" src="js/ie.js"></script><![endif]-->
+</head>
+<body>
+<main role="main">
+
+	<section class="intro">
+		<h1>JavaScript Custom Forms</h1>
+		<p>This library allows crossbrowser form elements customization using CSS.</p>
+		<p>Supported elements are following: <strong>select, checkbox, radio, file input, textarea and scrollbars</strong> (and more coming)</p>
+		<ul class="features">
+			<li>Very flexible customization using CSS</li>
+			<li>Keyboard navigation support</li>
+			<li>Modular system (more elements can be added)</li>
+			<li>Responsive layout support</li>
+			<li>API</li>
+		</ul>
+	</section>
+
+	<section class="demo-selects">
+		<h2>&lt;select&gt;</h2>
+		<p>Select module provides an ability to customize not only select area but also its dropdown. Multiple selects, keyboard navigation and custom scrollbars are supported in the option list.</p>
+		<div class="col">
+			<div class="row">
+				<select data-jcf='{"wrapNative": false}'>
+					<option value="v1">Custom drop in &lt;body&gt;</option>
+					<option value="v2">Option 1</option>
+					<option value="v3">Option 2</option>
+					<option value="v4">Option 3</option>
+					<option value="v5">Option 4</option>
+					<optgroup label="test">
+						<option value="v6">Option 5</option>
+						<option value="v7">Option 6</option>
+					</optgroup>
+					<option value="v7">Option 7</option>
+					<option value="v8">Option 8</option>
+					<option value="v9" disabled>Option 9 (disabled)</option>
+					<option value="v10" disabled>Option 10 (disabled)</option>
+					<option value="v11">Option 11</option>
+					<option value="v12">Option 12</option>
+					<option value="v13">Option 13</option>
+					<option value="v14">Option 14</option>
+					<option value="v15">Option 15</option>
+					<option value="v16">Option 16</option>
+					<option value="v17">Option 17</option>
+					<option value="v18">Option 18</option>
+					<option value="v19">Option 19</option>
+					<option value="v20">Option 20</option>
+					<option value="v21">Option 21</option>
+					<option value="v22">Option 22</option>
+					<option value="v23">Option 23</option>
+					<option value="v24">Option 24</option>
+					<optgroup label="last 26">
+						<option value="v25">Option 25</option>
+						<option value="v26">Option 26</option>
+					</optgroup>
+				</select>
+			</div>
+			<div class="row">
+				<select class="custom color" data-jcf='{"wrapNative": false, "fakeDropInBody": false, "useCustomScroll": false}'>
+					<option value="v1">Custom drop in fake</option>
+					<option class="color red" value="v2">Option 1</option>
+					<option class="color green" value="v3">Option 2</option>
+					<option class="color blue" value="v3">Option &lt;3</option>
+					<option value="v3">Option 4</option>
+					<option value="v3">Option 5</option>
+				</select>
+			</div>
+			<div class="row">
+				<select class="present" data-jcf='{"wrapNative": false}'>
+					<option class="hideme">Select gift !</option>
+					<option data-image="images/test-icon1.png" value="v4">Woo!</option>
+					<option data-image="images/test-icon2.png" value="v5">Haaa!</option>
+					<option data-image="images/test-icon3.png" value="v6">Boom?</option>
+				</select>
+			</div>
+			<div class="row">
+				<select disabled="disabled">
+					<option value="v4">Option 1</option>
+					<option value="v5" selected>Disabled select</option>
+				</select>
+			</div>
+		</div>
+		<div class="col">
+			<div class="row">
+				<select size="6">
+					<optgroup label="Test group1">
+						<option value="v1">Option 1</option>
+						<option value="v2">Option 2</option>
+						<option value="v3" selected>Option 3</option>
+					</optgroup>
+					<option value="v4">Option 4</option>
+					<option value="v5">Option 5</option>
+					<optgroup label="Test group2">
+						<option value="v6">Option 6</option>
+						<option value="v7" disabled>Option 7 (disabled)</option>
+						<option value="v8">Option 8</option>
+						<option value="v9">Option 9</option>
+					</optgroup>
+					<option value="v10">Option 10</option>
+					<option value="v11">Option 11</option>
+				</select>
+				<select class="multitest" size="7" multiple>
+					<option>Option 1</option>
+					<option>Option 2</option>
+					<option>Option 3</option>
+					<option>Option 4</option>
+					<option>Option 5</option>
+					<optgroup label="Test group3">
+						<option>Option 6</option>
+						<option selected>Option 7</option>
+						<option selected>Option 8</option>
+						<option>Option 9</option>
+					</optgroup>
+					<option>Option 10</option>
+					<option>Option 11</option>
+					<option>Option 12</option>
+					<option>Option 13</option>
+					<option>Option 14</option>
+					<option>Option 15</option>
+					<option>Option 16</option>
+					<option>Option 17</option>
+					<option>Option 18</option>
+					<option>Option 19</option>
+					<option>Option 20</option>
+					<option>Option 21</option>
+					<option>Option 22</option>
+					<option>Option 23</option>
+				</select>
+			</div>
+		</div>
+	</section>
+
+	<section class="demo-checkboxes">
+		<h2>Checkboxes and radios</h2>
+		<p>Focused and pressed states are also handled.</p>
+		<div class="col">
+			<div class="row">
+				<input type="checkbox" id="chk1" />
+				<label title="Unchecked state" for="chk1">Unchecked</label>
+			</div>	
+			<div class="row">
+				<input type="checkbox" checked="checked" id="chk2" />
+				<label title="Checked state" for="chk2">Checked</label>
+			</div>
+			<div class="row">
+				<input type="checkbox" disabled="disabled" id="chk3" />
+				<label title="Checked state" for="chk3">Disabled</label>
+			</div>
+			<div class="row">
+				<input type="checkbox" disabled="disabled" checked="checked" id="chk4" />
+				<label title="Checked state" for="chk4">Disabled checked</label>
+			</div>
+		</div>
+		<div class="col">
+			<div class="row">
+				<input type="radio" name="rtest" id="rad1" />
+				<label for="rad1" title="Unchecked state">Unchecked</label>
+			</div>
+			<div class="row">
+				<input type="radio" name="rtest" checked="checked" id="rad2" data-jcf='{"wrapNative": true}' />
+				<label for="rad2" title="Checked state">Checked</label>
+			</div>
+			<div class="row">
+				<input type="radio" name="rtest" disabled="disabled" checked="checked" id="rad3" />
+				<label for="rad3" title="Disabled state">Disabled</label>
+			</div>
+		</div>
+	</section>
+
+	<section class="demo-file">
+		<h2>File input</h2>
+		<p>Simple file input customization. Custom browse button text, focus/pressed state, selected file extension class.</p>
+		<div class="row">
+			<label>Normal:</label>
+			<input type="file">
+		</div>
+		<div class="row">
+			<label>Custom:</label>
+			<input type="file" data-jcf='{"buttonText": "Custom button", "placeholderText": "Custom placeholder"}'>
+		</div>
+		<div class="row">
+			<label>Disabled:</label>
+			<input type="file" disabled>
+		</div>	
+	</section>
+
+	<section class="demo-scrollbars">
+		<h2>Scrollbars</h2>
+		<p>Scrollbars can be either vertical or horizontal. Nested scrollbars are supported. Can be applied on textarea using additional module - <code>jcf.textarea.js</code></p>
+		<div class="col">
+			<div class="test jcf-scrollable">
+				<img src="images/test.png" width="512" height="512" alt="" />
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, officia, facilis, similique voluptates ut assumenda ea ex vero suscipit possimus nihil animi unde dolore in sint error quod consequatur modi!</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, officia, facilis, similique voluptates ut assumenda ea ex vero suscipit possimus nihil animi unde dolore in sint error quod consequatur modi!</p>
+			</div>
+		</div>
+		<div class="col">
+			<textarea cols="40" rows="10">
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+	Aspernatur saepe nostrum quas enim, tenetur unde ut.
+
+	Eum aspernatur, sunt enim ea magni repellat debitis, sequi recusandae temporibus explicabo minus eaque.
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime ab, fuga modi tempora id voluptatibus, nostrum quae nihil quam dignissimos praesentium et totam repudiandae sequi magnam numquam reprehenderit animi ea.
+			
+			END.</textarea>
+		</div>
+	</section>
+
+	<section class="browser-support">
+		<h2>Browser support</h2>
+		<p>The script was tested in the following browsers:</p>
+		<ul>
+			<li>Internet Explorer 8+</li>
+			<li>Firefox</li>
+			<li>Chrome</li>
+			<li>Safari</li>
+			<li>Opera</li>
+			<li>Windows RT Tablets</li>
+			<li>Android 4+</li>
+			<li>iOS7+</li>
+		</ul>
+	</section>
+
+	<section class="why-jquery">
+		<h2>Why jQuery?</h2>
+		<p>Customization of form elements can be done with pure JavaScript though there's no use to reinvent the wheel because <strong>custom event handling and delegation systems</strong> are already built into jQuery.</p>
+	</section>
+
+	<section class="usage">
+		<h2>Usage</h2>
+		<p>The script requires <a href="http://jquery.com/">jQuery framework</a> to work properly. To add script in your page simply attach core file - <code>jcf.js</code> and some of modules you want to customize:</p>
+		<pre>
+&lt;script src="js/jquery-1.11.1.js"&gt;&lt;/script&gt;
+&lt;script src="js/jcf.js"&gt;&lt;/script&gt;
+&lt;script src="js/jcf.select.js"&gt;&lt;/script&gt;
+&lt;script src="js/jcf.radio.js"&gt;&lt;/script&gt;
+&lt;script src="js/jcf.checkbox.js"&gt;&lt;/script&gt;</pre>
+		<p>When the page is loaded all you have to do is simply call the function:</p>
+		<pre>
+$(function() {
+	jcf.replaceAll();
+});</pre>
+	</section>
+
+	<section class="licence">
+		<h2>License</h2>
+		<p>This script is licensed under the <a hred="LICENSE.txt">MIT License</a></p>
+		<p>Copyright 2014 <a hred="http://psd2html.com">PSD2HTML</a></p>
+	</section>
+
+</main>
+
+</body>
+</html>
