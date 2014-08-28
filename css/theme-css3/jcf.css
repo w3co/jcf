@@ -220,7 +220,6 @@
 	border:1px solid #b8c3c9;
 	border-width: 1px 0;
 	background: #fff;
-	margin: -1px 0 0;
 	height: 30px;
 	width: 14px;
 	left: 0;
@@ -337,6 +336,7 @@ body > .jcf-select-drop {
 	overflow: hidden;
 	margin: -1px 0 0;
 	z-index: 9999;
+	top: 0;
 }
 .jcf-select-drop .jcf-select-drop-content {
 	border: 1px solid #0bb;

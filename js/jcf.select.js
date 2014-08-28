@@ -88,7 +88,8 @@
 			this.doc = $(document);
 			this.realElement = $(this.options.element);
 			this.fakeElement = $(this.options.fakeAreaStructure).insertAfter(this.realElement);
-			this.selectText = this.fakeElement.find(this.options.selectTextSelector);
+			this.selectTextContainer = this.fakeElement.find(this.options.selectTextSelector);
+			this.selectText = $('<span></span>').appendTo(this.selectTextContainer);
 			makeUnselectable(this.fakeElement);
 
 			// copy classes from original select
@@ -218,7 +219,7 @@
 			var target = $(e.target),
 				clickedInsideSelect = target.closest(this.fakeElement).length || target.closest(this.dropdown).length;
 
-			if(!clickedInsideSelect && $.contains(document.body, e.target)) {
+			if(!clickedInsideSelect) {
 				this.hideDropdown();
 			}
 		},
@@ -348,14 +349,25 @@
 			var selectedIndex = this.realElement.prop('selectedIndex'),
 				selectedOption = this.realElement.prop('options')[selectedIndex],
 				selectedOptionImage = selectedOption.getAttribute('data-image'),
-				selectedOptionClasses = getPrefixedClasses(selectedOption.className, this.options.optionClassPrefix),
-				selectedFakeElement = $('<span></span>', {'class': selectedOptionClasses, html: selectedOption.innerHTML});
+				selectedOptionClasses,
+				selectedFakeElement;
 
-			if(selectedOptionImage) {
-				$('<img>', {src: selectedOptionImage}).prependTo(selectedFakeElement);
+			if(this.currentSelectedText !== selectedOption.innerHTML || this.currentSelectedImage !== selectedOptionImage) {
+				selectedOptionClasses = getPrefixedClasses(selectedOption.className, this.options.optionClassPrefix);
+				this.selectText.attr('class', selectedOptionClasses).html(selectedOption.innerHTML);
+
+				if(selectedOptionImage) {
+					if(!this.selectImage) {
+						this.selectImage = $('<img>').prependTo(this.selectTextContainer).hide();
+					}
+					this.selectImage.attr('src', selectedOptionImage).show();
+				} else if(this.selectImage) {
+					this.selectImage.hide();
+				}
+
+				this.currentSelectedText = selectedOption.innerHTML;
+				this.currentSelectedImage = selectedOptionImage;
 			}
-
-			this.selectText.empty().append(selectedFakeElement);
 		},
 		refresh: function() {
 			// refresh selected text

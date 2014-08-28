@@ -490,7 +490,7 @@
 			// resize handle
 			this.handleSize = Math.round(this.currentSliderSize * this.ratio);
 			this.handle.css(this.sizeProperty, this.handleSize);
-			this.handleSize = this.handle[this.sizeProperty]();
+			this.handleSize = this.handle[this.fullSizeProperty]();
 
 			return this;
 		},
