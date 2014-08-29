@@ -354,6 +354,11 @@ body > .jcf-select-drop {
 	left: -1px;
 	right: -1px;
 }
+.jcf-select .jcf-select-drop.jcf-drop-flipped {
+	top: auto;
+	bottom: 100%;
+}
+
 
 /* multiple select / list box styles */
 .jcf-list-box {

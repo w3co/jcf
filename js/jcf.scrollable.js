@@ -17,6 +17,7 @@
 		},
 		options: {
 			mouseWheelStep: 150,
+			handleResize: true,
 			alwaysShowScrollbars: false,
 			alwaysPreventMouseWheel: false,
 			scrollAreaStructure: '<div class="jcf-scrollable-wrapper"></div>'
@@ -61,7 +62,9 @@
 
 			// add event handlers
 			this.realElement.on('scroll', this.onScroll);
-			this.win.on('resize orientationchange load', this.onResize);
+			if(this.options.handleResize) {
+				this.win.on('resize orientationchange load', this.onResize);
+			}
 
 			// add pointer/wheel event handlers
 			this.realElement.on('jcf-mousewheel', this.onMouseWheel);

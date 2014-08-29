@@ -110,7 +110,7 @@
 			} else {
 				// just hide native select
 				this.realElement.addClass(this.options.hiddenClass);
-				this.fakeDropTarget = this.options.fakeDropInBody ? 'body' : this.fakeElement;
+				this.fakeDropTarget = this.options.fakeDropInBody ? $('body') : this.fakeElement;
 			}
 		},
 		attachEvents: function() {
@@ -259,6 +259,7 @@
 			// create new select list instance
 			this.list = new SelectList({
 				useHoverClass: true,
+				handleResize: false,
 				alwaysPreventMouseWheel: true,
 				maxVisibleItems: this.options.maxVisibleItems,
 				useCustomScroll: this.options.useCustomScroll,
@@ -278,7 +279,7 @@
 				dropHeight = this.dropdown.outerHeight(),
 				winScrollTop = this.win.scrollTop(),
 				winHeight = this.win.height(),
-				calcTop, calcLeft, needFlipDrop = false;
+				calcTop, calcLeft, bodyOffset, needFlipDrop = false;
 
 			// check flip drop position
 			if(selectOffset.top + selectHeight + dropHeight > winScrollTop + winHeight && selectOffset.top - dropHeight > winScrollTop) {
@@ -286,14 +287,15 @@
 			}
 
 			if(this.options.fakeDropInBody) {
+				bodyOffset = this.fakeDropTarget.css('position') !== 'static' ? this.fakeDropTarget.offset().top : 0;
 				if(this.options.flipDropToFit && needFlipDrop) {
 					// calculate flipped dropdown position
 					calcLeft = selectOffset.left;
-					calcTop = selectOffset.top - dropHeight;
+					calcTop = selectOffset.top - dropHeight - bodyOffset;
 				} else {
 					// calculate default drop position
 					calcLeft = selectOffset.left;
-					calcTop = selectOffset.top + selectHeight;
+					calcTop = selectOffset.top + selectHeight - bodyOffset;
 				}
 
 				// update drop styles
@@ -509,6 +511,7 @@
 			selectOnClick: true,
 			useHoverClass: false,
 			useCustomScroll: false,
+			handleResize: true,
 			alwaysPreventMouseWheel: false,
 			indexAttribute: 'data-index',
 			cloneClassPrefix: 'jcf-option-',
@@ -659,6 +662,7 @@
 				if(this.options.useCustomScroll && jcf.modules.Scrollable) {
 					// add custom scrollbar if specified in options
 					jcf.replace(this.listHolder, 'Scrollable', {
+						handleResize: this.options.handleResize,
 						alwaysPreventMouseWheel: this.options.alwaysPreventMouseWheel
 					});
 					return;
