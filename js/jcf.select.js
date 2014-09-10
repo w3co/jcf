@@ -256,6 +256,14 @@
 			this.dropdown.addClass(getPrefixedClasses(this.realElement.prop('className'), this.options.selectClassPrefix));
 			makeUnselectable(this.dropdown);
 
+			// set initial styles for dropdown in body
+			if(this.options.fakeDropInBody) {
+				this.dropdown.css({
+					position: 'absolute',
+					top: -9999
+				});
+			}
+
 			// create new select list instance
 			this.list = new SelectList({
 				useHoverClass: true,
@@ -300,7 +308,6 @@
 
 				// update drop styles
 				this.dropdown.css({
-					position: 'absolute',
 					width: selectWidth,
 					left: calcLeft,
 					top: calcTop

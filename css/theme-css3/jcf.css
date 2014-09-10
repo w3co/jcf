@@ -336,7 +336,6 @@ body > .jcf-select-drop {
 	overflow: hidden;
 	margin: -1px 0 0;
 	z-index: 9999;
-	top: 0;
 }
 .jcf-select-drop .jcf-select-drop-content {
 	border: 1px solid #0bb;
