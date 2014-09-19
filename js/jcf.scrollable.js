@@ -125,6 +125,9 @@
 						return;
 					}
 				}
+				if(!this.verticalScrollActive && !this.horizontalScrollActive) {
+					return;
+				}
 			}
 
 			// prevent default action and scroll item

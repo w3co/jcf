@@ -57,9 +57,13 @@
 			this.fakeElement.on('click', this.onFakeClick);
 			this.fakeElement.on('jcf-pointerdown', this.onPress);
 		},
-		onRealClick: function() {
-			// just redraw fake element
-			this.refresh();
+		onRealClick: function(e) {
+			// just redraw fake element (setTimeout handles click that might be prevented)
+			var self = this;
+			this.savedEventObject = e;
+			setTimeout(function() {
+				self.refresh();
+			}, 0);
 		},
 		onFakeClick: function(e) {
 			// skip event if clicked on real element inside wrapper
@@ -69,37 +73,42 @@
 
 			// toggle checked class
 			if(!this.realElement.is(':disabled')) {
-				this.realElement.prop('checked', !this.realElement.prop('checked'));
-				this.refresh();
-				this.realElement.trigger('change');
+				delete this.savedEventObject;
+				this.stateChecked = this.realElement.prop('checked');
+				this.realElement.prop('checked', !this.stateChecked);
+				this.fireNativeEvent(this.realElement, 'click');
+				if(this.savedEventObject && this.savedEventObject.isDefaultPrevented()) {
+					this.realElement.prop('checked', this.stateChecked);
+				} else {
+					this.fireNativeEvent(this.realElement, 'change');
+				}
+				delete this.savedEventObject;
 			}
 		},
 		onFocus: function() {
 			if(!this.pressedFlag || !this.focusedFlag) {
-				this.fakeElement.addClass(this.options.focusClass);
-
 				this.focusedFlag = true;
+				this.fakeElement.addClass(this.options.focusClass);
 				this.realElement.on('blur', this.onBlur);
 			}
 		},
 		onBlur: function() {
 			if(!this.pressedFlag) {
-				this.fakeElement.removeClass(this.options.focusClass);
-
 				this.focusedFlag = false;
+				this.fakeElement.removeClass(this.options.focusClass);
 				this.realElement.off('blur', this.onBlur);
 			}
 		},
-		onPress: function() {
-			if(!this.focusedFlag) {
+		onPress: function(e) {
+			if(!this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = true;
 			this.fakeElement.addClass(this.options.pressedClass);
 			this.doc.on('jcf-pointerup', this.onRelease);
 		},
-		onRelease: function() {
-			if(this.focusedFlag) {
+		onRelease: function(e) {
+			if(this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = false;

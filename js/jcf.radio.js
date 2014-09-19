@@ -54,9 +54,13 @@
 			this.fakeElement.on('click', this.onFakeClick);
 			this.fakeElement.on('jcf-pointerdown', this.onPress);
 		},
-		onRealClick: function() {
-			// redraw current radio and its group
-			this.refreshRadioGroup();
+		onRealClick: function(e) {
+			// redraw current radio and its group (setTimeout handles click that might be prevented)
+			var self = this;
+			this.savedEventObject = e;
+			setTimeout(function() {
+				self.refreshRadioGroup();
+			}, 0);
 		},
 		onFakeClick: function(e) {
 			// skip event if clicked on real element inside wrapper
@@ -66,9 +70,18 @@
 
 			// toggle checked class
 			if(!this.realElement.is(':disabled')) {
+				delete this.savedEventObject;
+				this.currentActiveRadio = this.getCurrentActiveRadio();
+				this.stateChecked = this.realElement.prop('checked');
 				this.realElement.prop('checked', true);
-				this.refreshRadioGroup();
-				this.realElement.trigger('change');
+				this.fireNativeEvent(this.realElement, 'click');
+				if(this.savedEventObject && this.savedEventObject.isDefaultPrevented()) {
+					this.realElement.prop('checked', this.stateChecked);
+					this.currentActiveRadio.prop('checked', true);
+				} else {
+					this.fireNativeEvent(this.realElement, 'change');
+				}
+				delete this.savedEventObject;
 			}
 		},
 		onFocus: function() {
@@ -85,21 +98,24 @@
 				this.realElement.off('blur', this.onBlur);
 			}
 		},
-		onPress: function() {
-			if(!this.focusedFlag) {
+		onPress: function(e) {
+			if(!this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = true;
 			this.fakeElement.addClass(this.options.pressedClass);
 			this.doc.on('jcf-pointerup', this.onRelease);
 		},
-		onRelease: function() {
-			if(this.focusedFlag) {
+		onRelease: function(e) {
+			if(this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = false;
 			this.fakeElement.removeClass(this.options.pressedClass);
 			this.doc.off('jcf-pointerup', this.onRelease);
+		},
+		getCurrentActiveRadio: function() {
+			return this.getRadioGroup(this.realElement).filter(':checked');
 		},
 		getRadioGroup: function(radio) {
 			// find radio group for specified radio button

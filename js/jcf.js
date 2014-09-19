@@ -35,7 +35,7 @@
 
 	// detect device type
 	var isTouchDevice = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
-		isWinPhoneDevice = navigator.msPointerEnabled && /MSIE 10.*Touch/.test(navigator.userAgent);
+		isWinPhoneDevice = /Windows Phone/.test(navigator.userAgent);
 	commonOptions.isMobileDevice = !!(isTouchDevice || isWinPhoneDevice);
 
 	// create global stylesheet if custom forms are used
@@ -53,7 +53,7 @@
 		};
 
 		// add special rules
-		addCSSRule('.' + commonOptions.hiddenClass, 'position:absolute !important;left:-9999px !important;display:block !important');
+		addCSSRule('.' + commonOptions.hiddenClass, 'position:absolute !important;left:-9999px !important;height:1px !important;width:1px !important;margin:0 !important;border-width:0 !important;-webkit-appearance:none;-moz-appearance:none;appearance:none');
 		addCSSRule('.' + commonOptions.rtlClass + '.' + commonOptions.hiddenClass, 'right:-9999px !important; left: auto !important');
 		addCSSRule('.' + commonOptions.unselectableClass, '-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;');
 		addCSSRule('.' + commonOptions.resetAppearanceClass, 'background: none; border: none; -webkit-appearance: none; appearance: none; opacity: 0; filter: alpha(opacity=0);');
@@ -210,6 +210,38 @@
 		};
 	}());
 
+	// extra module methods
+	var moduleMixin = {
+		// provide function for firing native events
+		fireNativeEvent: function(elements, eventName) {
+			$(elements).each(function() {
+				var element = this, eventObject;					
+				if(element.dispatchEvent) {
+					eventObject = document.createEvent('HTMLEvents');
+					eventObject.target = element;
+					eventObject.initEvent(eventName, true, true);
+					element.dispatchEvent(eventObject);
+				} else if(document.createEventObject) {
+					eventObject = document.createEventObject();
+					eventObject.target = element;
+					element.fireEvent('on' + eventName, eventObject);
+				}
+			});
+		},
+		// bind event handlers for module instance (functions beggining with "on")
+		bindHandlers: function() {
+			var self = this;
+			$.each(self, function(propName, propValue) {
+				if(propName.indexOf('on') === 0 && $.isFunction(propValue)) {
+					// dont use $.proxy here because it doesn't create unique handler
+					self[propName] = function() {
+						return propValue.apply(self, arguments);
+					};
+				}
+			});
+		}
+	};
+
 	// public API
 	return {
 		modules: {},
@@ -247,21 +279,11 @@
 			// set proto as prototype for new module
 			Module.prototype = proto;
 
-			// bind event handlers for module and its plugins (functions beggining with on)
-			Module.prototype.bindHandlers = function() {
-				var self = this;
-				$.each(self, function(propName, propValue) {
-					if(propName.indexOf('on') === 0 && $.isFunction(propValue)) {
-						// dont use $.proxy here because it doesn't create unique handler
-						self[propName] = function() {
-							return propValue.apply(self, arguments);
-						};
-					}
-				});
-			};
+			// add mixin methods to module proto
+			$.extend(proto, moduleMixin);
 			if(proto.plugins) {
 				$.each(proto.plugins, function(pluginName, plugin) {
-					plugin.prototype.bindHandlers = Module.prototype.bindHandlers;
+					$.extend(plugin.prototype, moduleMixin);
 				});
 			}
 

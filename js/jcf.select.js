@@ -110,6 +110,7 @@
 			} else {
 				// just hide native select
 				this.realElement.addClass(this.options.hiddenClass);
+				this.fakeElement.attr('title', this.realElement.attr('title'));
 				this.fakeDropTarget = this.options.fakeDropInBody ? $('body') : this.fakeElement;
 			}
 		},
@@ -226,7 +227,7 @@
 		onSelect: function() {
 			this.hideDropdown();
 			this.refresh();
-			this.realElement.trigger('change');
+			this.fireNativeEvent(this.realElement, 'change');
 		},
 		toggleListMode: function(state) {
 			if(!this.options.wrapNative) {
@@ -379,6 +380,13 @@
 			}
 		},
 		refresh: function() {
+			// refresh fake select visibility
+			if(this.realElement.prop('style').display === 'none') {
+				this.fakeElement.hide();
+			} else {
+				this.fakeElement.show();
+			}
+
 			// refresh selected text
 			this.refreshSelectedText();
 
@@ -483,7 +491,8 @@
 			}
 		},
 		onSelect: function() {
-			this.realElement.trigger('change');
+			this.fireNativeEvent(this.realElement, 'change');
+			this.fireNativeEvent(this.realElement, 'click');
 		},
 		onFocus: function() {
 			if(!this.pressedFlag || !this.focusedFlag) {
