@@ -218,7 +218,6 @@
 				var element = this, eventObject;					
 				if(element.dispatchEvent) {
 					eventObject = document.createEvent('HTMLEvents');
-					eventObject.target = element;
 					eventObject.initEvent(eventName, true, true);
 					element.dispatchEvent(eventObject);
 				} else if(document.createEventObject) {

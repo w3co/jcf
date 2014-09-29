@@ -590,17 +590,20 @@
 		},
 		onItemRelease: function(e) {
 			// remove event handlers and temporary data
-			this.listHolder.on('jcf-pointerup', this.indexSelector, this.onItemRelease);
+			this.listHolder.off('jcf-pointerup', this.indexSelector, this.onItemRelease);
 
 			// simulate item selection
 			if(this.tmpListOffsetTop === this.list.offset().top) {
-				this.onSelectItem(e);
+				this.listHolder.on('click', this.indexSelector, this.onSelectItem);
 			}
 			delete this.tmpListOffsetTop;
 		},
 		onSelectItem: function(e) {
 			var clickedIndex = parseFloat(e.currentTarget.getAttribute(this.options.indexAttribute)),
 				range;
+
+			// remove click event handler
+			this.listHolder.on('click', this.indexSelector, this.onSelectItem);
 
 			// ignore clicks on disabled options
 			if(e.button > 1 || this.realOptions[clickedIndex].disabled) {
