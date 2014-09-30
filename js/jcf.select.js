@@ -603,7 +603,7 @@
 				range;
 
 			// remove click event handler
-			this.listHolder.on('click', this.indexSelector, this.onSelectItem);
+			this.listHolder.off('click', this.indexSelector, this.onSelectItem);
 
 			// ignore clicks on disabled options
 			if(e.button > 1 || this.realOptions[clickedIndex].disabled) {

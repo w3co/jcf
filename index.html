@@ -47,7 +47,7 @@
 		<p>Select module provides an ability to customize not only select area but also its dropdown. Multiple selects, keyboard navigation and custom scrollbars are supported in the option list.</p>
 		<div class="col">
 			<div class="row">
-				<select data-jcf='{"wrapNative": false}'>
+				<select data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
 					<option value="v1">Custom drop in &lt;body&gt;</option>
 					<option value="v2">Option 1</option>
 					<option value="v3">Option 2</option>
@@ -82,7 +82,7 @@
 				</select>
 			</div>
 			<div class="row">
-				<select class="custom color" data-jcf='{"wrapNative": false, "fakeDropInBody": false, "useCustomScroll": false}'>
+				<select class="custom color" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false, "fakeDropInBody": false, "useCustomScroll": false}'>
 					<option value="v1">Custom drop in area</option>
 					<option class="color red" value="v2">Option 1</option>
 					<option class="color green" value="v3">Option 2</option>
@@ -92,7 +92,17 @@
 				</select>
 			</div>
 			<div class="row">
-				<select class="present" data-jcf='{"wrapNative": false}'>
+				<select>
+					<option value="v1">Native dropdown</option>
+					<option value="v2">Option 1</option>
+					<option value="v3">Option 2</option>
+					<option value="v3">Option 3</option>
+					<option value="v3">Option 4</option>
+					<option value="v3">Option 5</option>
+				</select>
+			</div>
+			<div class="row">
+				<select class="present" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
 					<option class="hideme">Select gift !</option>
 					<option data-image="images/test-icon1.png" value="v4">Woo!</option>
 					<option data-image="images/test-icon2.png" value="v5">Haaa!</option>
