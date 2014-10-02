@@ -74,7 +74,10 @@
 			this.redrawScrollbars();
 		},
 		onResize: function() {
-			this.rebuildScrollbars();
+			// do not rebuild scrollbars if form field is in focus
+			if(!$(document.activeElement).is(':input')) {
+				this.rebuildScrollbars();
+			}
 		},
 		onTouchBody: function(e) {
 			if(e.pointerType === 'touch') {
