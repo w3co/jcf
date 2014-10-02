@@ -64,6 +64,13 @@
 			html.addClass(commonOptions.rtlClass);
 		}
 
+		// handle form reset event
+		html.on('reset', function() {
+			setTimeout(function(){
+				api.refreshAll();
+			}, 0);
+		});
+
 		// mark stylesheet as created
 		commonOptions.styleSheetCreated = true;
 	};
@@ -242,7 +249,7 @@
 	};
 
 	// public API
-	return {
+	var api = {
 		modules: {},
 		getOptions: function() {
 			return $.extend({}, commonOptions);
@@ -399,4 +406,6 @@
 			}
 		}
 	};
+
+	return api;
 }));
