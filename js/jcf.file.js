@@ -1,10 +1,10 @@
 /*!
  * JavaScript Custom Forms : File Module
  *
- * Copyright 2014 PSD2HTML (http://psd2html.com)
+ * Copyright 2014 PSD2HTML (http://psd2html.com/jcf)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 0.9.5
+ * Version: 1.0.0
  */
 ;(function($, window) {
 	'use strict';
