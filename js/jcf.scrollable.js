@@ -134,7 +134,7 @@
 			}
 
 			// prevent default action and scroll item
-			if(preventFlag) {
+			if(preventFlag || this.options.alwaysPreventMouseWheel) {
 				e.preventDefault();
 			} else {
 				return;
@@ -191,7 +191,7 @@
 				desiredDimensions = {
 					width: this.realElement.innerWidth() + this.vBar.getThickness(),
 					height: this.realElement.innerHeight() + this.hBar.getThickness()
-				}
+				};
 			} else {
 				// unwrap real element and measure it according to CSS
 				this.saveElementDimensions().saveScrollOffsets();
@@ -199,13 +199,13 @@
 				this.scrollWrapper.detach();
 
 				// measure element
-				currentStyles = this.realElement.prop('style'),
-				currentWidth = parseFloat(currentStyles.width),
+				currentStyles = this.realElement.prop('style');
+				currentWidth = parseFloat(currentStyles.width);
 				currentHeight = parseFloat(currentStyles.height);
 
 				// reset styles if needed
 				if(this.embeddedDimensions && currentWidth && currentHeight) {
-					this.isModifiedStyles |= (currentWidth !== this.embeddedDimensions.width || currentHeight !== this.embeddedDimensions.height)
+					this.isModifiedStyles |= (currentWidth !== this.embeddedDimensions.width || currentHeight !== this.embeddedDimensions.height);
 					this.realElement.css({
 						overflow: '',
 						width: '',
