@@ -212,7 +212,16 @@
 			if('deltaX' in origEvent) {
 				e.deltaX = origEvent.deltaX;
 			}
+
+			// handle deltaMode for mouse wheel
 			e.delta = e.deltaY || e.deltaX;
+			if (origEvent.deltaMode === 1) {
+				var lineHeight = 16;
+				e.delta *= lineHeight;
+				e.deltaY *= lineHeight;
+				e.deltaX *= lineHeight;
+			}
+
 			return ($.event.dispatch || $.event.handle).call(this, e);
 		};
 	}());

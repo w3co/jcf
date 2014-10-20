@@ -114,18 +114,18 @@
 				currentScrollLeft = this.realElement.scrollLeft(),
 				maxScrollTop = this.realElement.prop('scrollHeight') - this.embeddedDimensions.innerHeight,
 				maxScrollLeft = this.realElement.prop('scrollWidth') - this.embeddedDimensions.innerWidth,
-				extraLeft, extraTop;
+				extraLeft, extraTop, preventFlag;
 
 			// check edge cases
 			if(!this.options.alwaysPreventMouseWheel) {
-				if(this.verticalScrollActive) {
-					if((currentScrollTop <= 0 && e.deltaY < 0) || (currentScrollTop >= maxScrollTop && e.deltaY > 0)) {
-						return;
+				if(this.verticalScrollActive && e.deltaY) {
+					if(!(currentScrollTop <= 0 && e.deltaY < 0) && !(currentScrollTop >= maxScrollTop && e.deltaY > 0)) {
+						preventFlag = true;
 					}
 				}
-				if(this.horizontalScrollActive) {
-					if((currentScrollLeft <= 0 && e.deltaX < 0) || (currentScrollLeft >= maxScrollLeft && e.deltaX > 0)) {
-						return;
+				if(this.horizontalScrollActive && e.deltaX) {
+					if(!(currentScrollLeft <= 0 && e.deltaX < 0) && !(currentScrollLeft >= maxScrollLeft && e.deltaX > 0)) {
+						preventFlag = true;
 					}
 				}
 				if(!this.verticalScrollActive && !this.horizontalScrollActive) {
@@ -134,7 +134,11 @@
 			}
 
 			// prevent default action and scroll item
-			e.preventDefault();
+			if(preventFlag) {
+				e.preventDefault();
+			} else {
+				return;
+			}
 
 			extraLeft = e.deltaX / 100 * this.options.mouseWheelStep;
 			extraTop = e.deltaY / 100 * this.options.mouseWheelStep;
