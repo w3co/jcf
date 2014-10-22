@@ -1,7 +1,7 @@
 /*!
  * JavaScript Custom Forms
  *
- * Copyright 2014 PSD2HTML (http://psd2html.com/jcf)
+ * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
  * Version: 1.0.0

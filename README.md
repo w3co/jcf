@@ -1,7 +1,7 @@
 # JCF - JavaScript Custom Forms
 This library allows crossbrowser customization of form elements using CSS.
 
-Check http://psd2html.com/jcf for live demo.
+Check [live demo](http://w3co.github.io/jcf/).
 
 ## Browser support
 The script was tested in the following browsers:
@@ -290,4 +290,4 @@ Apply custom scrollbar on `<textarea>` (Works only when `Scrollable` module is a
 
 This script is licensed under the [MIT License](LICENSE.txt).
 
-Copyright 2014 [PSD2HTML.com](http://psd2html.com/jcf)
+Copyright 2014 [PSD2HTML.com](http://psd2html.com/?jcf)
