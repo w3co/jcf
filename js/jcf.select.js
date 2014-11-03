@@ -4,7 +4,7 @@
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 1.0.0
+ * Version: 1.0.1
  */
 ;(function($, window) {
 	'use strict';
@@ -149,7 +149,7 @@
 		onKeyDown: function(e) {
 			if(e.which === 13) {
 				this.toggleDropdown();
-			} else {
+			} else if(this.dropActive) {
 				this.delayedRefresh();
 			}
 		},
@@ -319,6 +319,11 @@
 			this.dropdown.add(this.fakeElement).toggleClass(this.options.flipDropClass, this.options.flipDropToFit && needFlipDrop);
 		},
 		showDropdown: function() {
+			// do not show empty custom dropdown 
+			if(!this.realElement.prop('options').length) {
+				return;
+			}
+
 			// create options list if not created
 			if(!this.dropdown) {
 				this.createDropdown();
@@ -358,11 +363,16 @@
 			// redraw selected area
 			var selectedIndex = this.realElement.prop('selectedIndex'),
 				selectedOption = this.realElement.prop('options')[selectedIndex],
-				selectedOptionImage = selectedOption.getAttribute('data-image'),
+				selectedOptionImage = selectedOption ? selectedOption.getAttribute('data-image') : null,
 				selectedOptionClasses,
 				selectedFakeElement;
 
-			if(this.currentSelectedText !== selectedOption.innerHTML || this.currentSelectedImage !== selectedOptionImage) {
+			if(!selectedOption) {
+				if(this.selectImage) {
+					this.selectImage.hide();
+				}
+				this.selectText.removeAttr('class').empty();
+			} else if(this.currentSelectedText !== selectedOption.innerHTML || this.currentSelectedImage !== selectedOptionImage) {
 				selectedOptionClasses = getPrefixedClasses(selectedOption.className, this.options.optionClassPrefix);
 				this.selectText.attr('class', selectedOptionClasses).html(selectedOption.innerHTML);
 
@@ -457,11 +467,16 @@
 		attachEvents: function() {
 			// delayed refresh handler
 			var self = this;
-			this.delayedRefresh = function() {
-				clearTimeout(self.refreshTimer);
-				self.refreshTimer = setTimeout(function() {
-					self.refresh();
-				}, 1);
+			this.delayedRefresh = function(e) {
+				if(e && e.keyCode == 16) {
+					// ignore SHIFT key
+					return;
+				} else {
+					clearTimeout(self.refreshTimer);
+					self.refreshTimer = setTimeout(function() {
+						self.refresh();
+					}, 1);
+				}
 			};
 
 			// other event handlers

@@ -4,7 +4,7 @@
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 1.0.0
+ * Version: 1.0.1
  */
 ;(function (root, factory) {
 	if (typeof define === 'function' && define.amd) {
