@@ -4,7 +4,7 @@
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 ;(function($, window) {
 	'use strict';
@@ -94,10 +94,31 @@
 			}
 		},
 		onMoveBody: function(e) {
+			var targetScrollTop,
+				targetScrollLeft,
+				verticalScrollAllowed = this.verticalScrollActive,
+				horizontalScrollAllowed = this.horizontalScrollActive;
+
 			if(e.pointerType === 'touch') {
-				e.preventDefault();
-				this.realElement.scrollLeft(this.touchData.scrollLeft - e.pageX + this.touchData.left);
-				this.realElement.scrollTop(this.touchData.scrollTop - e.pageY + this.touchData.top);
+				targetScrollTop = this.touchData.scrollTop - e.pageY + this.touchData.top;
+				targetScrollLeft = this.touchData.scrollLeft - e.pageX + this.touchData.left;
+
+				// check that scrolling is ended and release outer scrolling
+				if(this.verticalScrollActive && (targetScrollTop < 0 || targetScrollTop > this.vBar.maxValue)) {
+					verticalScrollAllowed = false;
+				}
+				if(this.horizontalScrollActive && (targetScrollLeft < 0 || targetScrollLeft > this.hBar.maxValue)) {
+					horizontalScrollAllowed = false;
+				}
+
+				this.realElement.scrollTop(targetScrollTop);
+				this.realElement.scrollLeft(targetScrollLeft);
+
+				if(verticalScrollAllowed || horizontalScrollAllowed) {
+					e.preventDefault();
+				} else {
+					this.onReleaseBody(e);
+				}
 			}
 		},
 		onReleaseBody: function(e) {

@@ -4,7 +4,7 @@
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 ;(function (root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -129,8 +129,8 @@
 		// check that mouse event are not simulated by mobile browsers
 		var lastTouch = null;
 		var mouseEventSimulated = function(e) {
-			var dx = Math.abs(e.clientX - lastTouch.x),
-				dy = Math.abs(e.clientY - lastTouch.y),
+			var dx = Math.abs(e.pageX - lastTouch.x),
+				dy = Math.abs(e.pageY - lastTouch.y),
 				rangeDistance = 25;
 
 			if (dx <= rangeDistance && dy <= rangeDistance) {
@@ -141,6 +141,7 @@
 		// normalize event
 		var fixEvent = function(e) {
 			var origEvent = e || window.event,
+				touchEventData = null,
 				targetEventName = eventMap[origEvent.type];
 
 			e = $.event.fix(origEvent);
@@ -156,13 +157,15 @@
 			} else {
 				e.pointerType = origEvent.type.substr(0,5); // "mouse" or "touch" word length
 			}
-			if(!e.pageX || !e.pageY) {
-				e.pageX = (origEvent.changedTouches ? origEvent.changedTouches[0] : origEvent).pageX;
-				e.pageY = (origEvent.changedTouches ? origEvent.changedTouches[0] : origEvent).pageY;
+
+			if(!e.pageX && !e.pageY) {
+				touchEventData = origEvent.changedTouches ? origEvent.changedTouches[0] : origEvent;
+				e.pageX = touchEventData.pageX;
+				e.pageY = touchEventData.pageY;
 			}
 
-			if(origEvent.type === 'touchend' && origEvent.changedTouches[0]) {
-				lastTouch = {x: origEvent.changedTouches[0].clientX, y: origEvent.changedTouches[0].clientY};
+			if(origEvent.type === 'touchend') {
+				lastTouch = {x: e.pageX, y: e.pageY};
 			}
 			if(e.pointerType === 'mouse' && lastTouch && mouseEventSimulated(e)) {
 				return;

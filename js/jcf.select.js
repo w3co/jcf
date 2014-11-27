@@ -4,7 +4,7 @@
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 ;(function($, window) {
 	'use strict';
@@ -194,6 +194,7 @@
 			}
 
 			// toggle dropdown visibility
+			this.selectOpenedByEvent = e.pointerType;
 			this.toggleDropdown();
 
 			// misc handlers
@@ -350,6 +351,9 @@
 				this.doc.off('jcf-pointerdown', this.onOutsideClick);
 				this.win.off('resize', this.onResize);
 				this.dropActive = false;
+				if(this.selectOpenedByEvent === 'touch') {
+					this.onBlur();
+				}
 			}
 		},
 		toggleDropdown: function() {
