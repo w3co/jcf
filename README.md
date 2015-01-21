@@ -203,6 +203,72 @@ Each module has options. Some of options are common between modules and some are
 	</tbody>
 </table>
 
+### Number input
+
+<table>
+	<thead>
+		<tr>
+			<th>Option</th>
+			<th>Description</th>
+			<th>Data Type</th>
+			<th>Default</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>pressInterval</code></td>
+			<td>Specify the interval which will control how fast the value is changing while the buttons are pressed.</td>
+			<td>number</td>
+			<td><code>150</code></td>
+		</tr>
+		<tr>
+			<td><code>disabledClass</code></td>
+			<td>Specify class which will be added to arrow buttons when maximum or minimum number is reached</td>
+			<td>string</td>
+			<td><code>"jcf-disabled"</code></td>
+		</tr>
+	</tbody>
+</table>
+
+### Range input
+
+<table>
+	<thead>
+		<tr>
+			<th>Option</th>
+			<th>Description</th>
+			<th>Data Type</th>
+			<th>Default</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>orientation</code></td>
+			<td>Specify range input orientation: <code>"horizontal"</code> or <code>"vertical"</code></td>
+			<td>string</td>
+			<td><code>horizontal</code></td>
+		</tr>
+		<tr>
+			<td><code>dragHandleCenter</code></td>
+			<td>Enable this option to make the cursor stick to the center of the input handle</td>
+			<td>boolean</td>
+			<td><code>true</code></td>
+		</tr>
+		<tr>
+			<td><code>snapToMarks</code></td>
+			<td>Snap input handle to HTML5 datalist marks</td>
+			<td>boolean</td>
+			<td><code>true</code></td>
+		</tr>
+		<tr>
+			<td><code>snapRadius</code></td>
+			<td>Specify snapping radius in pixels</td>
+			<td>number</td>
+			<td><code>5</code></td>
+		</tr>
+	</tbody>
+</table>
+
 ### File
 
 <table>

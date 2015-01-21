@@ -4,7 +4,7 @@
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
  * 
- * Version: 1.0.2
+ * Version: 1.0.3
  */
 ;(function($, window) {
 	'use strict';
@@ -286,7 +286,7 @@
 			var selectOffset = this.fakeElement.offset(),
 				selectWidth = this.fakeElement.outerWidth(),
 				selectHeight = this.fakeElement.outerHeight(),
-				dropHeight = this.dropdown.outerHeight(),
+				dropHeight = this.dropdown.css('width', selectWidth).outerHeight(),
 				winScrollTop = this.win.scrollTop(),
 				winHeight = this.win.height(),
 				calcTop, calcLeft, bodyOffset, needFlipDrop = false;

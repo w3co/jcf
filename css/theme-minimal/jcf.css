@@ -378,6 +378,143 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	content: '';
 }
 
+/* number input */
+.jcf-number {
+	display: inline-block;
+	position: relative;
+	height: 32px;
+}
+.jcf-number input {-moz-appearance: textfield;}
+.jcf-number input::-webkit-inner-spin-button,
+.jcf-number input::-webkit-outer-spin-button {-webkit-appearance: none;}
+.jcf-number input {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border: 1px solid #777;
+	padding: 3px 27px 3px 7px;
+	margin: 0;
+	height: 100%;
+}
+.jcf-number .jcf-btn-dec,
+.jcf-number .jcf-btn-inc {
+	position: absolute;
+	background: #aaa;
+	width: 20px;
+	height: 15px;
+	right: 1px;
+	top: 1px;
+}
+.jcf-number .jcf-btn-dec {
+	top: auto;
+	bottom: 1px;
+}
+.jcf-number .jcf-btn-dec:hover,
+.jcf-number .jcf-btn-inc:hover {
+	background: #e6e6e6;
+}
+.jcf-number.jcf-disabled .jcf-btn-dec:hover,
+.jcf-number.jcf-disabled .jcf-btn-inc:hover {
+	background: #aaa;
+}
+.jcf-number .jcf-btn-dec:before,
+.jcf-number .jcf-btn-inc:before {
+	position: absolute;
+	content: '';
+	width: 0;
+	height: 0;
+	top: 50%;
+	left: 50%;
+	margin: -6px 0 0 -4px;
+	border: 4px solid #aaa;
+	border-color: transparent transparent #000 transparent;
+}
+.jcf-number .jcf-btn-dec:before {
+	margin: -1px 0 0 -4px;
+	border-color: #000 transparent transparent transparent;	
+}
+.jcf-number.jcf-disabled .jcf-btn-dec:before,
+.jcf-number.jcf-disabled .jcf-btn-inc:before,
+.jcf-number .jcf-btn-dec.jcf-disabled:before,
+.jcf-number .jcf-btn-inc.jcf-disabled:before {
+	opacity: 0.3;
+}
+.jcf-number.jcf-disabled input {
+	background: #ddd;
+}
+
+/* range input */
+.jcf-range {
+	display: inline-block;
+	min-width: 200px;
+	margin: 0 10px;
+	width: 130px;
+}
+.jcf-range .jcf-range-track {
+	margin: 0 20px 0 0;
+	position: relative;
+	display: block;
+}
+.jcf-range .jcf-range-wrapper {
+	background: #e5e5e5;
+	border-radius: 5px;
+	display: block;
+	margin: 5px 0;
+	height: 10px;
+}
+.jcf-range.jcf-vertical {
+	width: auto;
+}
+.jcf-range.jcf-vertical .jcf-range-wrapper {
+	margin: 0;
+	width: 10px;
+	height: auto;
+	padding: 20px 0 0;
+}
+.jcf-range.jcf-vertical .jcf-range-track {
+	height: 180px;
+	width: 10px;
+}
+.jcf-range.jcf-vertical .jcf-range-handle {
+	left: -5px;
+	top: auto;
+}
+.jcf-range .jcf-range-handle {
+	position: absolute;
+	background: #aaa;
+	border-radius: 19px;
+	width: 19px;
+	height: 19px;
+	margin: -4px 0 0;
+	z-index: 1;
+	top: 0;
+	left: 0;
+}
+.jcf-range .jcf-range-mark {
+	position: absolute;
+	overflow: hidden;
+	background: #000;
+	width: 1px;
+	height: 3px;
+	top: -7px;
+	margin: 0 0 0 9px;
+}
+.jcf-range.jcf-vertical .jcf-range-mark {
+	margin: 0 0 9px;
+	left: 14px;
+	top: auto;
+	width: 3px;
+	height: 1px;
+}
+.jcf-range.jcf-focus .jcf-range-handle {
+	border: 1px solid #f00;
+	margin: -5px 0 0 -1px;
+}
+.jcf-range.jcf-disabled {
+	background: none !important;
+	opacity: 0.3;
+}
+
 /* common styles */
 .jcf-disabled {background: #ddd !important;}
 .jcf-focus, .jcf-focus * {border-color: #f00 !important;}
