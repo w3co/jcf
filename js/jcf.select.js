@@ -683,7 +683,7 @@
 			// detect max visible items
 			var maxCount = this.options.maxVisibleItems,
 				sizeValue = this.element.prop('size');
-			if(sizeValue > 1) {
+			if(sizeValue > 1 && !this.element.is('[jcf-size]')) {
 				maxCount = sizeValue;
 			}
 

@@ -58,7 +58,7 @@
 			</div>
 			<div class="row">
 				<label>With "min", "max" and "step" attributes:</label>
-				<input type="range" min="-3" max="45" step="7" onchange="console.log(this.value)">
+				<input type="range" min="-3" max="45" step="7">
 			</div>
 			<div class="row">
 				<label>HTML5 Datalist test:</label>
@@ -301,14 +301,14 @@
 	<section class="usage">
 		<h2>Usage</h2>
 		<p>The script requires <a href="http://jquery.com/">jQuery</a> to work properly. To add script in your page simply attach core file - <code>jcf.js</code> and some of modules you want to use for customization:</p>
-		<pre>
+		<pre class="html">
 &lt;script src="js/jquery-1.11.1.js"&gt;&lt;/script&gt;
 &lt;script src="js/jcf.js"&gt;&lt;/script&gt;
 &lt;script src="js/jcf.select.js"&gt;&lt;/script&gt;
 &lt;script src="js/jcf.radio.js"&gt;&lt;/script&gt;
 &lt;script src="js/jcf.checkbox.js"&gt;&lt;/script&gt;</pre>
 		<p>When the page is loaded all you have to do is simply call the function:</p>
-		<pre>
+		<pre class="javascript">
 $(function() {
 	jcf.replaceAll();
 });</pre>

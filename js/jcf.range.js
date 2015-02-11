@@ -46,6 +46,7 @@
 			this.offsetProperty = this.isVertical ? 'bottom' : 'left';
 			this.eventProperty = this.isVertical ? 'pageY' : 'pageX';
 			this.sizeMethod = this.isVertical ? 'innerHeight' : 'innerWidth';
+			this.fakeElement.css('touchAction', this.isVertical ? 'pan-x' : 'pan-y');
 			if(this.isVertical) {
 				this.fakeElement.addClass(this.options.verticalClass);
 			}
