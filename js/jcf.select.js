@@ -3,7 +3,7 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
 ;(function($, window) {
@@ -31,10 +31,10 @@
 			return this.element.is('[size]:not([jcf-size]), [multiple]');
 		},
 		createInstance: function() {
-			if(this.instance) {
+			if (this.instance) {
 				this.instance.destroy();
 			}
-			if(this.isListBox()) {
+			if (this.isListBox()) {
 				this.instance = new ListBox(this.options);
 			} else {
 				this.instance = new ComboBox(this.options);
@@ -44,7 +44,7 @@
 			var typeMismatch = (this.isListBox() && this.instance instanceof ComboBox) ||
 								(!this.isListBox() && this.instance instanceof ListBox);
 
-			if(typeMismatch) {
+			if (typeMismatch) {
 				this.createInstance();
 			} else {
 				this.instance.refresh();
@@ -76,7 +76,7 @@
 		this.init();
 	}
 	$.extend(ComboBox.prototype, {
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.bindHandlers();
 			this.attachEvents();
@@ -96,11 +96,11 @@
 			this.fakeElement.addClass(getPrefixedClasses(this.realElement.prop('className'), this.options.selectClassPrefix));
 
 			// detect device type and dropdown behavior
-			if(this.options.isMobileDevice && this.options.wrapNativeOnMobile && !this.options.wrapNative) {
+			if (this.options.isMobileDevice && this.options.wrapNativeOnMobile && !this.options.wrapNative) {
 				this.options.wrapNative = true;
 			}
 
-			if(this.options.wrapNative) {
+			if (this.options.wrapNative) {
 				// wrap native select inside fake block
 				this.realElement.prependTo(this.fakeElement).css({
 					position: 'absolute',
@@ -120,14 +120,14 @@
 			this.delayedRefresh = function() {
 				setTimeout(function() {
 					self.refresh();
-					if(self.list) {
+					if (self.list) {
 						self.list.refresh();
 					}
 				}, 1);
 			};
 
 			// native dropdown event handlers
-			if(this.options.wrapNative) {
+			if (this.options.wrapNative) {
 				this.realElement.on({
 					focus: this.onFocus,
 					change: this.onChange,
@@ -147,9 +147,9 @@
 			}
 		},
 		onKeyDown: function(e) {
-			if(e.which === 13) {
+			if (e.which === 13) {
 				this.toggleDropdown();
-			} else if(this.dropActive) {
+			} else if (this.dropActive) {
 				this.delayedRefresh();
 			}
 		},
@@ -157,7 +157,7 @@
 			this.refresh();
 		},
 		onFocus: function() {
-			if(!this.pressedFlag || !this.focusedFlag) {
+			if (!this.pressedFlag || !this.focusedFlag) {
 				this.fakeElement.addClass(this.options.focusClass);
 				this.realElement.on('blur', this.onBlur);
 				this.toggleListMode(true);
@@ -165,7 +165,7 @@
 			}
 		},
 		onBlur: function() {
-			if(!this.pressedFlag) {
+			if (!this.pressedFlag) {
 				this.fakeElement.removeClass(this.options.focusClass);
 				this.realElement.off('blur', this.onBlur);
 				this.toggleListMode(false);
@@ -173,23 +173,23 @@
 			}
 		},
 		onResize: function() {
-			if(this.dropActive) {
+			if (this.dropActive) {
 				this.hideDropdown();
 			}
 		},
 		onSelectDropPress: function() {
-			this.pressedFlag = true;	
+			this.pressedFlag = true;
 		},
 		onSelectDropRelease: function(e, pointerEvent) {
 			this.pressedFlag = false;
-			if(pointerEvent.pointerType === 'mouse') {
+			if (pointerEvent.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 		},
 		onSelectAreaPress: function(e) {
 			// skip click if drop inside fake element or real select is disabled
 			var dropClickedInsideFakeElement = !this.options.fakeDropInBody && $(e.target).closest(this.dropdown).length;
-			if(dropClickedInsideFakeElement || e.button > 1 || this.realElement.is(':disabled')) {
+			if (dropClickedInsideFakeElement || e.button > 1 || this.realElement.is(':disabled')) {
 				return;
 			}
 
@@ -198,8 +198,8 @@
 			this.toggleDropdown();
 
 			// misc handlers
-			if(!this.focusedFlag) {
-				if(e.pointerType === 'mouse') {
+			if (!this.focusedFlag) {
+				if (e.pointerType === 'mouse') {
 					this.realElement.focus();
 				} else {
 					this.onFocus(e);
@@ -210,7 +210,7 @@
 			this.doc.on('jcf-pointerup', this.onSelectAreaRelease);
 		},
 		onSelectAreaRelease: function(e) {
-			if(this.focusedFlag && e.pointerType === 'mouse') {
+			if (this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = false;
@@ -221,7 +221,7 @@
 			var target = $(e.target),
 				clickedInsideSelect = target.closest(this.fakeElement).length || target.closest(this.dropdown).length;
 
-			if(!clickedInsideSelect) {
+			if (!clickedInsideSelect) {
 				this.hideDropdown();
 			}
 		},
@@ -231,8 +231,8 @@
 			this.fireNativeEvent(this.realElement, 'change');
 		},
 		toggleListMode: function(state) {
-			if(!this.options.wrapNative) {
-				if(state) {
+			if (!this.options.wrapNative) {
+				if (state) {
 					// temporary change select to list to avoid appearing of native dropdown
 					this.realElement.attr({
 						size: 4,
@@ -240,7 +240,7 @@
 					});
 				} else {
 					// restore select from list mode to dropdown select
-					if(!this.options.wrapNative) {
+					if (!this.options.wrapNative) {
 						this.realElement.removeAttr('size jcf-size');
 					}
 				}
@@ -248,7 +248,7 @@
 		},
 		createDropdown: function() {
 			// destroy previous dropdown if needed
-			if(this.dropdown) {
+			if (this.dropdown) {
 				this.list.destroy();
 				this.dropdown.remove();
 			}
@@ -259,7 +259,7 @@
 			makeUnselectable(this.dropdown);
 
 			// set initial styles for dropdown in body
-			if(this.options.fakeDropInBody) {
+			if (this.options.fakeDropInBody) {
 				this.dropdown.css({
 					position: 'absolute',
 					top: -9999
@@ -292,13 +292,13 @@
 				calcTop, calcLeft, bodyOffset, needFlipDrop = false;
 
 			// check flip drop position
-			if(selectOffset.top + selectHeight + dropHeight > winScrollTop + winHeight && selectOffset.top - dropHeight > winScrollTop) {
+			if (selectOffset.top + selectHeight + dropHeight > winScrollTop + winHeight && selectOffset.top - dropHeight > winScrollTop) {
 				needFlipDrop = true;
 			}
 
-			if(this.options.fakeDropInBody) {
+			if (this.options.fakeDropInBody) {
 				bodyOffset = this.fakeDropTarget.css('position') !== 'static' ? this.fakeDropTarget.offset().top : 0;
-				if(this.options.flipDropToFit && needFlipDrop) {
+				if (this.options.flipDropToFit && needFlipDrop) {
 					// calculate flipped dropdown position
 					calcLeft = selectOffset.left;
 					calcTop = selectOffset.top - dropHeight - bodyOffset;
@@ -320,13 +320,13 @@
 			this.dropdown.add(this.fakeElement).toggleClass(this.options.flipDropClass, this.options.flipDropToFit && needFlipDrop);
 		},
 		showDropdown: function() {
-			// do not show empty custom dropdown 
-			if(!this.realElement.prop('options').length) {
+			// do not show empty custom dropdown
+			if (!this.realElement.prop('options').length) {
 				return;
 			}
 
 			// create options list if not created
-			if(!this.dropdown) {
+			if (!this.dropdown) {
 				this.createDropdown();
 			}
 
@@ -344,20 +344,20 @@
 			this.doc.on('jcf-pointerdown', this.onOutsideClick);
 		},
 		hideDropdown: function() {
-			if(this.dropdown) {
+			if (this.dropdown) {
 				this.savedScrollTop = this.list.getScrollTop();
 				this.fakeElement.removeClass(this.options.dropActiveClass + ' ' + this.options.flipDropClass);
 				this.dropdown.removeClass(this.options.flipDropClass).detach();
 				this.doc.off('jcf-pointerdown', this.onOutsideClick);
 				this.win.off('resize', this.onResize);
 				this.dropActive = false;
-				if(this.selectOpenedByEvent === 'touch') {
+				if (this.selectOpenedByEvent === 'touch') {
 					this.onBlur();
 				}
 			}
 		},
 		toggleDropdown: function() {
-			if(this.dropActive) {
+			if (this.dropActive) {
 				this.hideDropdown();
 			} else {
 				this.showDropdown();
@@ -368,24 +368,23 @@
 			var selectedIndex = this.realElement.prop('selectedIndex'),
 				selectedOption = this.realElement.prop('options')[selectedIndex],
 				selectedOptionImage = selectedOption ? selectedOption.getAttribute('data-image') : null,
-				selectedOptionClasses,
-				selectedFakeElement;
+				selectedOptionClasses;
 
-			if(!selectedOption) {
-				if(this.selectImage) {
+			if (!selectedOption) {
+				if (this.selectImage) {
 					this.selectImage.hide();
 				}
 				this.selectText.removeAttr('class').empty();
-			} else if(this.currentSelectedText !== selectedOption.innerHTML || this.currentSelectedImage !== selectedOptionImage) {
+			} else if (this.currentSelectedText !== selectedOption.innerHTML || this.currentSelectedImage !== selectedOptionImage) {
 				selectedOptionClasses = getPrefixedClasses(selectedOption.className, this.options.optionClassPrefix);
 				this.selectText.attr('class', selectedOptionClasses).html(selectedOption.innerHTML);
 
-				if(selectedOptionImage) {
-					if(!this.selectImage) {
+				if (selectedOptionImage) {
+					if (!this.selectImage) {
 						this.selectImage = $('<img>').prependTo(this.selectTextContainer).hide();
 					}
 					this.selectImage.attr('src', selectedOptionImage).show();
-				} else if(this.selectImage) {
+				} else if (this.selectImage) {
 					this.selectImage.hide();
 				}
 
@@ -395,7 +394,7 @@
 		},
 		refresh: function() {
 			// refresh fake select visibility
-			if(this.realElement.prop('style').display === 'none') {
+			if (this.realElement.prop('style').display === 'none') {
 				this.fakeElement.hide();
 			} else {
 				this.fakeElement.show();
@@ -406,10 +405,10 @@
 
 			// handle disabled state
 			this.fakeElement.toggleClass(this.options.disabledClass, this.realElement.is(':disabled'));
-		},	
+		},
 		destroy: function() {
 			// restore structure
-			if(this.options.wrapNative) {
+			if (this.options.wrapNative) {
 				this.realElement.insertBefore(this.fakeElement).css({
 					position: '',
 					height: '',
@@ -417,7 +416,7 @@
 				}).removeClass(this.options.resetAppearanceClass);
 			} else {
 				this.realElement.removeClass(this.options.hiddenClass);
-				if(this.realElement.is('[jcf-size]')) {
+				if (this.realElement.is('[jcf-size]')) {
 					this.realElement.removeAttr('size jcf-size');
 				}
 			}
@@ -445,13 +444,12 @@
 		this.init();
 	}
 	$.extend(ListBox.prototype, {
-		init: function(options) {
+		init: function() {
 			this.bindHandlers();
 			this.initStructure();
 			this.attachEvents();
 		},
 		initStructure: function() {
-			var self = this;
 			this.realElement = $(this.options.element);
 			this.fakeElement = $(this.options.fakeStructure).insertAfter(this.realElement);
 			this.listHolder = this.fakeElement.find(this.options.listHolder);
@@ -472,7 +470,7 @@
 			// delayed refresh handler
 			var self = this;
 			this.delayedRefresh = function(e) {
-				if(e && e.keyCode == 16) {
+				if (e && e.which === 16) {
 					// ignore SHIFT key
 					return;
 				} else {
@@ -499,13 +497,13 @@
 		},
 		onFakeOptionsPress: function(e, pointerEvent) {
 			this.pressedFlag = true;
-			if(pointerEvent.pointerType === 'mouse') {
+			if (pointerEvent.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 		},
 		onFakeOptionsRelease: function(e, pointerEvent) {
 			this.pressedFlag = false;
-			if(pointerEvent.pointerType === 'mouse') {
+			if (pointerEvent.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 		},
@@ -514,14 +512,14 @@
 			this.fireNativeEvent(this.realElement, 'click');
 		},
 		onFocus: function() {
-			if(!this.pressedFlag || !this.focusedFlag) {
+			if (!this.pressedFlag || !this.focusedFlag) {
 				this.fakeElement.addClass(this.options.focusClass);
 				this.realElement.on('blur', this.onBlur);
 				this.focusedFlag = true;
 			}
 		},
 		onBlur: function() {
-			if(!this.pressedFlag) {
+			if (!this.pressedFlag) {
 				this.fakeElement.removeClass(this.options.focusClass);
 				this.realElement.off('blur', this.onBlur);
 				this.focusedFlag = false;
@@ -581,7 +579,7 @@
 			this.listHolder.on('jcf-pointerdown', this.indexSelector, this.onItemPress);
 			this.listHolder.on('jcf-pointerdown', this.onPress);
 
-			if(this.options.useHoverClass) {
+			if (this.options.useHoverClass) {
 				this.listHolder.on('jcf-pointerover', this.indexSelector, this.onHoverItem);
 			}
 		},
@@ -598,7 +596,7 @@
 			this.fakeOptions.removeClass(this.options.hoverClass).eq(hoverIndex).addClass(this.options.hoverClass);
 		},
 		onItemPress: function(e) {
-			if(e.pointerType === 'touch' || this.options.selectOnClick) {
+			if (e.pointerType === 'touch' || this.options.selectOnClick) {
 				// select option after "click"
 				this.tmpListOffsetTop = this.list.offset().top;
 				this.listHolder.on('jcf-pointerup', this.indexSelector, this.onItemRelease);
@@ -607,12 +605,12 @@
 				this.onSelectItem(e);
 			}
 		},
-		onItemRelease: function(e) {
+		onItemRelease: function() {
 			// remove event handlers and temporary data
 			this.listHolder.off('jcf-pointerup', this.indexSelector, this.onItemRelease);
 
 			// simulate item selection
-			if(this.tmpListOffsetTop === this.list.offset().top) {
+			if (this.tmpListOffsetTop === this.list.offset().top) {
 				this.listHolder.on('click', this.indexSelector, this.onSelectItem);
 			}
 			delete this.tmpListOffsetTop;
@@ -625,17 +623,17 @@
 			this.listHolder.off('click', this.indexSelector, this.onSelectItem);
 
 			// ignore clicks on disabled options
-			if(e.button > 1 || this.realOptions[clickedIndex].disabled) {
+			if (e.button > 1 || this.realOptions[clickedIndex].disabled) {
 				return;
 			}
 
-			if(this.element.prop('multiple')) {
-				if(e.metaKey || e.ctrlKey || e.pointerType === 'touch') {
+			if (this.element.prop('multiple')) {
+				if (e.metaKey || e.ctrlKey || e.pointerType === 'touch') {
 					// if CTRL/CMD pressed or touch devices - toggle selected option
 					this.realOptions[clickedIndex].selected = !this.realOptions[clickedIndex].selected;
-				} else if(e.shiftKey) {
+				} else if (e.shiftKey) {
 					// if SHIFT pressed - update selection
-					range = [this.lastClickedIndex, clickedIndex].sort(function(a, b){
+					range = [this.lastClickedIndex, clickedIndex].sort(function(a, b) {
 						return a - b;
 					});
 					this.realOptions.each(function(index, option) {
@@ -650,7 +648,7 @@
 			}
 
 			// save last clicked option
-			if(!e.shiftKey) {
+			if (!e.shiftKey) {
 				this.lastClickedIndex = clickedIndex;
 			}
 
@@ -658,7 +656,7 @@
 			this.refreshSelectedClass();
 
 			// scroll to active item in desktop browsers
-			if(e.pointerType === 'mouse') {
+			if (e.pointerType === 'mouse') {
 				this.scrollToActiveOption();
 			}
 
@@ -683,21 +681,21 @@
 			// detect max visible items
 			var maxCount = this.options.maxVisibleItems,
 				sizeValue = this.element.prop('size');
-			if(sizeValue > 1 && !this.element.is('[jcf-size]')) {
+			if (sizeValue > 1 && !this.element.is('[jcf-size]')) {
 				maxCount = sizeValue;
 			}
 
 			// handle scrollbar
 			var needScrollBar = this.fakeOptions.length > maxCount;
 			this.container.toggleClass(this.options.scrollClass, needScrollBar);
-			if(needScrollBar) {
+			if (needScrollBar) {
 				// change max-height
 				this.listHolder.css({
 					maxHeight: this.getOverflowHeight(maxCount),
 					overflow: 'auto'
 				});
 
-				if(this.options.useCustomScroll && jcf.modules.Scrollable) {
+				if (this.options.useCustomScroll && jcf.modules.Scrollable) {
 					// add custom scrollbar if specified in options
 					jcf.replace(this.listHolder, 'Scrollable', {
 						handleResize: this.options.handleResize,
@@ -708,14 +706,13 @@
 			}
 
 			// disable edge wheel scrolling
-			if(this.options.alwaysPreventMouseWheel) {
+			if (this.options.alwaysPreventMouseWheel) {
 				this.preventWheelHandler = function(e) {
 					var currentScrollTop = self.listHolder.scrollTop(),
-						maxScrollTop = self.listHolder.prop('scrollHeight') - self.listHolder.innerHeight(),
-						maxScrollLeft = self.listHolder.prop('scrollWidth') - self.listHolder.innerWidth();
+						maxScrollTop = self.listHolder.prop('scrollHeight') - self.listHolder.innerHeight();
 
 					// check edge cases
-					if((currentScrollTop <= 0 && e.deltaY < 0) || (currentScrollTop >= maxScrollTop && e.deltaY > 0)) {
+					if ((currentScrollTop <= 0 && e.deltaY < 0) || (currentScrollTop >= maxScrollTop && e.deltaY > 0)) {
 						e.preventDefault();
 					}
 				};
@@ -728,14 +725,14 @@
 				isMultiple = this.element.prop('multiple'),
 				selectedIndex = this.element.prop('selectedIndex');
 
-			if(isMultiple) {
+			if (isMultiple) {
 				this.realOptions.each(function(index, option) {
 					self.fakeOptions.eq(index).toggleClass(self.options.selectedClass, !!option.selected);
 				});
 			} else {
 				this.fakeOptions.removeClass(this.options.selectedClass + ' ' + this.options.hoverClass);
 				selectedItem = this.fakeOptions.eq(selectedIndex).addClass(this.options.selectedClass);
-				if(this.options.useHoverClass) {
+				if (this.options.useHoverClass) {
 					selectedItem.addClass(this.options.hoverClass);
 				}
 			}
@@ -748,8 +745,8 @@
 		getSelectedIndexRange: function() {
 			var firstSelected = -1, lastSelected = -1;
 			this.realOptions.each(function(index, option) {
-				if(option.selected) {
-					if(firstSelected < 0) {
+				if (option.selected) {
+					if (firstSelected < 0) {
 						firstSelected = index;
 					}
 					lastSelected = index;
@@ -761,9 +758,9 @@
 			var selectedIndex = this.element.prop('selectedIndex'),
 				targetIndex;
 
-			if(this.element.prop('multiple')) {
+			if (this.element.prop('multiple')) {
 				// multiple selects handling
-				if(!this.previousRange) {
+				if (!this.previousRange) {
 					this.previousRange = [selectedIndex, selectedIndex];
 				}
 				this.currentRange = this.getSelectedIndexRange();
@@ -785,10 +782,10 @@
 				fakeOptionHeight = fakeOption.innerHeight();
 
 			// scroll list
-			if(fakeOptionOffset + fakeOptionHeight >= dropScrollTop + dropHeight) {
+			if (fakeOptionOffset + fakeOptionHeight >= dropScrollTop + dropHeight) {
 				// scroll down (always scroll to option)
 				return fakeOptionOffset - dropHeight + fakeOptionHeight;
-			} else if(fakeOptionOffset < dropScrollTop) {
+			} else if (fakeOptionOffset < dropScrollTop) {
 				// scroll up to option
 				return fakeOptionOffset;
 			}
@@ -814,15 +811,15 @@
 			newOption.setAttribute(this.options.indexAttribute, this.optionIndex++);
 
 			var optionImage, optionImageSrc = option.getAttribute('data-image');
-			if(optionImageSrc) {
+			if (optionImageSrc) {
 				optionImage = document.createElement('img');
 				optionImage.src = optionImageSrc;
 				newOption.insertBefore(optionImage, newOption.childNodes[0]);
 			}
-			if(option.disabled) {
+			if (option.disabled) {
 				newOption.className += ' ' + this.options.disabledClass;
 			}
-			if(option.className) {
+			if (option.className) {
 				newOption.className += ' ' + getPrefixedClasses(option.className, this.options.cloneClassPrefix);
 			}
 			return newOption;
@@ -839,7 +836,7 @@
 			optGroupContainer.appendChild(optGroupCaption);
 
 			// create list of options
-			if(optgroup.children.length) {
+			if (optgroup.children.length) {
 				optGroupList = this.createOptionsList(optgroup);
 				optGroupContainer.appendChild(optGroupList);
 			}
@@ -859,7 +856,7 @@
 				var item = self.createOptionContainer(currentNode),
 					newNode;
 
-				switch(currentNode.tagName.toLowerCase()) {
+				switch (currentNode.tagName.toLowerCase()) {
 					case 'option': newNode = self.createOption(currentNode); break;
 					case 'optgroup': newNode = self.createOptGroup(currentNode); break;
 				}
@@ -869,13 +866,13 @@
 		},
 		refresh: function() {
 			// check for select innerHTML changes
-			if(this.storedSelectHTML !== this.element.prop('innerHTML')) {
+			if (this.storedSelectHTML !== this.element.prop('innerHTML')) {
 				this.rebuildList();
 			}
 
 			// refresh custom scrollbar
 			var scrollInstance = jcf.getInstance(this.listHolder);
-			if(scrollInstance) {
+			if (scrollInstance) {
 				scrollInstance.refresh();
 			}
 

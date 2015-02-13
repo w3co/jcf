@@ -3,10 +3,10 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function($, window) {
+;(function($) {
 	'use strict';
 
 	jcf.addModule({
@@ -20,7 +20,7 @@
 		matchElement: function(element) {
 			return element.is(this.selector);
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.refresh();
@@ -41,7 +41,7 @@
 		},
 		attachEvents: function() {
 			this.realElement.on({
-				'focus': this.onFocus,
+				focus: this.onFocus,
 				'jcf-pointerdown': this.onPress
 			});
 		},
@@ -70,8 +70,8 @@
 			this.fakeElement.remove();
 
 			this.realElement.off({
-				'focus': this.onFocus,
-				'blur': this.onBlur,
+				focus: this.onFocus,
+				blur: this.onBlur,
 				'jcf-pointerdown': this.onPress
 			});
 
@@ -82,4 +82,4 @@
 		}
 	});
 
-}(jQuery, this));
+}(jQuery));

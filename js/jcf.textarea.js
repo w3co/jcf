@@ -3,10 +3,10 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function($, window) {
+;(function($) {
 	'use strict';
 
 	jcf.addModule({
@@ -20,7 +20,7 @@
 		matchElement: function(element) {
 			return element.is('textarea');
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.refresh();
@@ -33,7 +33,7 @@
 			this.resizer = $(this.options.resizerStructure).appendTo(this.fakeElement);
 
 			// add custom scrollbar
-			if(jcf.modules.Scrollable) {
+			if (jcf.modules.Scrollable) {
 				this.realElement.prependTo(this.fakeElement).addClass().css({
 					overflow: 'hidden',
 					resize: 'none'
@@ -82,7 +82,7 @@
 			this.realElement.innerWidth(newWidth - widthDiff).innerHeight(newHeight);
 			this.refreshCustomScrollbars();
 		},
-		onResizeRelease: function(e) {
+		onResizeRelease: function() {
 			this.doc.off({
 				'jcf-pointermove': this.onResizeMove,
 				'jcf-pointerup': this.onResizeRelease
@@ -103,7 +103,7 @@
 		},
 		refreshCustomScrollbars: function() {
 			// refresh custom scrollbars
-			if(this.isFocused) {
+			if (this.isFocused) {
 				this.scrollable.redrawScrollbars();
 			} else {
 				this.scrollable.refresh();
@@ -132,4 +132,4 @@
 		}
 	});
 
-}(jQuery, this));
+}(jQuery));

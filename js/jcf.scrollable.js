@@ -3,7 +3,7 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
 ;(function($, window) {
@@ -25,7 +25,7 @@
 		matchElement: function(element) {
 			return element.is('.jcf-scrollable');
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.rebuildScrollbars();
@@ -62,7 +62,7 @@
 
 			// add event handlers
 			this.realElement.on('scroll', this.onScroll);
-			if(this.options.handleResize) {
+			if (this.options.handleResize) {
 				this.win.on('resize orientationchange load', this.onResize);
 			}
 
@@ -75,12 +75,12 @@
 		},
 		onResize: function() {
 			// do not rebuild scrollbars if form field is in focus
-			if(!$(document.activeElement).is(':input')) {
+			if (!$(document.activeElement).is(':input')) {
 				this.rebuildScrollbars();
 			}
 		},
 		onTouchBody: function(e) {
-			if(e.pointerType === 'touch') {
+			if (e.pointerType === 'touch') {
 				this.touchData = {
 					scrollTop: this.realElement.scrollTop(),
 					scrollLeft: this.realElement.scrollLeft(),
@@ -99,22 +99,22 @@
 				verticalScrollAllowed = this.verticalScrollActive,
 				horizontalScrollAllowed = this.horizontalScrollActive;
 
-			if(e.pointerType === 'touch') {
+			if (e.pointerType === 'touch') {
 				targetScrollTop = this.touchData.scrollTop - e.pageY + this.touchData.top;
 				targetScrollLeft = this.touchData.scrollLeft - e.pageX + this.touchData.left;
 
 				// check that scrolling is ended and release outer scrolling
-				if(this.verticalScrollActive && (targetScrollTop < 0 || targetScrollTop > this.vBar.maxValue)) {
+				if (this.verticalScrollActive && (targetScrollTop < 0 || targetScrollTop > this.vBar.maxValue)) {
 					verticalScrollAllowed = false;
 				}
-				if(this.horizontalScrollActive && (targetScrollLeft < 0 || targetScrollLeft > this.hBar.maxValue)) {
+				if (this.horizontalScrollActive && (targetScrollLeft < 0 || targetScrollLeft > this.hBar.maxValue)) {
 					horizontalScrollAllowed = false;
 				}
 
 				this.realElement.scrollTop(targetScrollTop);
 				this.realElement.scrollLeft(targetScrollLeft);
 
-				if(verticalScrollAllowed || horizontalScrollAllowed) {
+				if (verticalScrollAllowed || horizontalScrollAllowed) {
 					e.preventDefault();
 				} else {
 					this.onReleaseBody(e);
@@ -122,7 +122,7 @@
 			}
 		},
 		onReleaseBody: function(e) {
-			if(e.pointerType === 'touch') {
+			if (e.pointerType === 'touch') {
 				delete this.touchData;
 				this.doc.off({
 					'jcf-pointermove': this.onMoveBody,
@@ -138,24 +138,24 @@
 				extraLeft, extraTop, preventFlag;
 
 			// check edge cases
-			if(!this.options.alwaysPreventMouseWheel) {
-				if(this.verticalScrollActive && e.deltaY) {
-					if(!(currentScrollTop <= 0 && e.deltaY < 0) && !(currentScrollTop >= maxScrollTop && e.deltaY > 0)) {
+			if (!this.options.alwaysPreventMouseWheel) {
+				if (this.verticalScrollActive && e.deltaY) {
+					if (!(currentScrollTop <= 0 && e.deltaY < 0) && !(currentScrollTop >= maxScrollTop && e.deltaY > 0)) {
 						preventFlag = true;
 					}
 				}
-				if(this.horizontalScrollActive && e.deltaX) {
-					if(!(currentScrollLeft <= 0 && e.deltaX < 0) && !(currentScrollLeft >= maxScrollLeft && e.deltaX > 0)) {
+				if (this.horizontalScrollActive && e.deltaX) {
+					if (!(currentScrollLeft <= 0 && e.deltaX < 0) && !(currentScrollLeft >= maxScrollLeft && e.deltaX > 0)) {
 						preventFlag = true;
 					}
 				}
-				if(!this.verticalScrollActive && !this.horizontalScrollActive) {
+				if (!this.verticalScrollActive && !this.horizontalScrollActive) {
 					return;
 				}
 			}
 
 			// prevent default action and scroll item
-			if(preventFlag || this.options.alwaysPreventMouseWheel) {
+			if (preventFlag || this.options.alwaysPreventMouseWheel) {
 				e.preventDefault();
 			} else {
 				return;
@@ -179,7 +179,7 @@
 			return this;
 		},
 		restoreElementDimensions: function() {
-			if(this.savedDimensions) {
+			if (this.savedDimensions) {
 				this.realElement.css({
 					width: this.savedDimensions.width,
 					height: this.savedDimensions.height
@@ -195,7 +195,7 @@
 			return this;
 		},
 		restoreScrollOffsets: function() {
-			if(this.savedOffsets) {
+			if (this.savedOffsets) {
 				this.realElement.scrollTop(this.savedOffsets.top);
 				this.realElement.scrollLeft(this.savedOffsets.left);
 			}
@@ -208,7 +208,7 @@
 				currentHeight,
 				currentWidth;
 
-			if(this.isModifiedStyles) {
+			if (this.isModifiedStyles) {
 				desiredDimensions = {
 					width: this.realElement.innerWidth() + this.vBar.getThickness(),
 					height: this.realElement.innerHeight() + this.hBar.getThickness()
@@ -225,7 +225,7 @@
 				currentHeight = parseFloat(currentStyles.height);
 
 				// reset styles if needed
-				if(this.embeddedDimensions && currentWidth && currentHeight) {
+				if (this.embeddedDimensions && currentWidth && currentHeight) {
 					this.isModifiedStyles |= (currentWidth !== this.embeddedDimensions.width || currentHeight !== this.embeddedDimensions.height);
 					this.realElement.css({
 						overflow: '',
@@ -245,7 +245,7 @@
 				this.realElement.css('overflow', 'hidden').prependTo(this.scrollWrapper);
 				this.restoreElementDimensions().restoreScrollOffsets();
 			}
-			
+
 			return desiredDimensions;
 		},
 		getEmbeddedDimensions: function(dimensions) {
@@ -256,7 +256,7 @@
 				paddingHeight = this.realElement.outerHeight() - this.realElement.height(),
 				resultDimensions;
 
-			if(this.options.alwaysShowScrollbars) {
+			if (this.options.alwaysShowScrollbars) {
 				// simply return dimensions without custom scrollbars
 				this.verticalScrollActive = true;
 				this.horizontalScrollActive = true;
@@ -278,7 +278,7 @@
 
 				this.horizontalScrollActive = this.realElement.prop('scrollWidth') > this.containerDimensions.width;
 				this.verticalScrollActive = this.realElement.prop('scrollHeight') > this.containerDimensions.height;
-				
+
 				this.restoreElementDimensions();
 				resultDimensions = {
 					innerWidth: dimensions.width - (this.verticalScrollActive ? fakeBarWidth : 0),
@@ -316,7 +316,7 @@
 			var viewSize, maxScrollValue;
 
 			// redraw vertical scrollbar
-			if(this.verticalScrollActive) {
+			if (this.verticalScrollActive) {
 				viewSize = this.vBarEdge ? this.containerDimensions.height - this.vBarEdge : this.embeddedDimensions.innerHeight;
 				maxScrollValue = this.realElement.prop('scrollHeight') - this.vBarEdge;
 
@@ -327,33 +327,33 @@
 			}
 
 			// redraw horizontal scrollbar
-			if(this.horizontalScrollActive) {
+			if (this.horizontalScrollActive) {
 				viewSize = this.embeddedDimensions.innerWidth;
 				maxScrollValue = this.realElement.prop('scrollWidth');
 
-				if(maxScrollValue === viewSize) {
+				if (maxScrollValue === viewSize) {
 					this.horizontalScrollActive = false;
 				}
 				this.hBar.show().setMaxValue(maxScrollValue - viewSize).setRatio(viewSize / maxScrollValue).setSize(viewSize);
 				this.hBar.setValue(this.realElement.scrollLeft());
 			} else {
-				this.hBar.hide();				
+				this.hBar.hide();
 			}
 
 			// set "touch-action" style rule
 			var touchAction = '';
-			if(this.verticalScrollActive && this.horizontalScrollActive) {
+			if (this.verticalScrollActive && this.horizontalScrollActive) {
 				touchAction = 'none';
-			} else if(this.verticalScrollActive) {
+			} else if (this.verticalScrollActive) {
 				touchAction = 'pan-x';
-			} else if(this.horizontalScrollActive) {
+			} else if (this.horizontalScrollActive) {
 				touchAction = 'pan-y';
 			}
 			this.realElement.css('touchAction', touchAction);
 		},
 		refresh: function() {
 			this.rebuildScrollbars();
-		},	
+		},
 		destroy: function() {
 			// remove event listeners
 			this.win.off('resize orientationchange load', this.onResize);
@@ -365,7 +365,7 @@
 				'jcf-pointermove': this.onMoveBody,
 				'jcf-pointerup': this.onReleaseBody
 			});
-			
+
 			// restore structure
 			this.saveScrollOffsets();
 			this.vBar.destroy();
@@ -443,13 +443,12 @@
 			});
 		},
 		attachEvents: function() {
-			var self = this;
 			this.bindHandlers();
 			this.handle.on('jcf-pointerdown', this.onHandlePress);
 			this.btnDec.add(this.btnInc).on('jcf-pointerdown', this.onButtonPress);
 		},
 		onHandlePress: function(e) {
-			if(e.pointerType === 'mouse' && e.button > 1) {
+			if (e.pointerType === 'mouse' && e.button > 1) {
 				return;
 			} else {
 				e.preventDefault();
@@ -472,7 +471,7 @@
 		},
 		onButtonPress: function(e) {
 			var direction;
-			if(e.pointerType === 'mouse' && e.button > 1) {
+			if (e.pointerType === 'mouse' && e.button > 1) {
 				return;
 			} else {
 				e.preventDefault();
@@ -489,7 +488,7 @@
 			var self = this;
 			this.stopButtonScrolling();
 			this.scrollTimer = setInterval(function() {
-				if(direction > 0) {
+				if (direction > 0) {
 					self.value += self.options.scrollStep;
 				} else {
 					self.value -= self.options.scrollStep;
@@ -502,7 +501,7 @@
 			clearInterval(this.scrollTimer);
 		},
 		triggerScrollEvent: function(scrollValue) {
-			if(this.options.onScroll) {
+			if (this.options.onScroll) {
 				this.options.onScroll(scrollValue);
 			}
 		},
@@ -539,9 +538,9 @@
 		},
 		setValue: function(value) {
 			this.value = value;
-			if(this.value < 0) {
+			if (this.value < 0) {
 				this.value = 0;
-			} else if(this.value > this.maxValue) {
+			} else if (this.value > this.maxValue) {
 				this.value = this.maxValue;
 			}
 			this.refresh();
@@ -560,7 +559,7 @@
 		},
 		refresh: function() {
 			// recalculate handle position
-			if(this.value === 0 || this.maxValue === 0) {
+			if (this.value === 0 || this.maxValue === 0) {
 				this.calcOffset = 0;
 			} else {
 				this.calcOffset = (this.value / this.maxValue) * (this.currentSliderSize - this.handleSize);
@@ -573,7 +572,7 @@
 			this.scrollbar.toggleClass(this.options.inactiveClass, this.maxValue === 0);
 		},
 		destroy: function() {
-			//remove event handlers and scrollbar block itself
+			// remove event handlers and scrollbar block itself
 			this.btnDec.add(this.btnInc).off('jcf-pointerdown', this.onButtonPress);
 			this.handle.off('jcf-pointerdown', this.onHandlePress);
 			this.doc.off('jcf-pointermove', this.onHandleDrag);

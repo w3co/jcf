@@ -3,10 +3,11 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function (root, factory) {
+;(function(root, factory) {
+	'use strict';
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
 	} else if (typeof exports === 'object') {
@@ -14,7 +15,7 @@
 	} else {
 		root.jcf = factory(jQuery);
 	}
-}(this, function ($) {
+}(this, function($) {
 	'use strict';
 
 	// private variables
@@ -34,7 +35,7 @@
 	};
 
 	// detect device type
-	var isTouchDevice = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+	var isTouchDevice = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
 		isWinPhoneDevice = /Windows Phone/.test(navigator.userAgent);
 	commonOptions.isMobileDevice = !!(isTouchDevice || isWinPhoneDevice);
 
@@ -45,7 +46,7 @@
 
 		// crossbrowser style handling
 		var addCSSRule = function(selector, rules, index) {
-			if(styleSheet.insertRule) {
+			if (styleSheet.insertRule) {
 				styleSheet.insertRule(selector + '{' + rules + '}', index);
 			} else {
 				styleSheet.addRule(selector, rules, index);
@@ -60,13 +61,13 @@
 
 		// detect rtl pages
 		var html = $('html'), body = $('body');
-		if(html.css('direction') === 'rtl' || body.css('direction') === 'rtl') {
+		if (html.css('direction') === 'rtl' || body.css('direction') === 'rtl') {
 			html.addClass(commonOptions.rtlClass);
 		}
 
 		// handle form reset event
 		html.on('reset', function() {
-			setTimeout(function(){
+			setTimeout(function() {
 				api.refreshAll();
 			}, 0);
 		});
@@ -78,11 +79,11 @@
 	// simplified pointer events handler
 	(function() {
 		var pointerEventsSupported = navigator.pointerEnabled || navigator.msPointerEnabled,
-			touchEventsSupported = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+			touchEventsSupported = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
 			eventList, eventMap = {}, eventPrefix = 'jcf-';
 
 		// detect events to attach
-		if(pointerEventsSupported) {
+		if (pointerEventsSupported) {
 			eventList = {
 				pointerover: navigator.pointerEnabled ? 'pointerover' : 'MSPointerOver',
 				pointerdown: navigator.pointerEnabled ? 'pointerdown' : 'MSPointerDown',
@@ -112,14 +113,14 @@
 				setup: function() {
 					var self = this;
 					$.each(eventHandlers, function(index, fallbackEvent) {
-						if(self.addEventListener) self.addEventListener(fallbackEvent, fixEvent, false);
+						if (self.addEventListener) self.addEventListener(fallbackEvent, fixEvent, false);
 						else self['on' + fallbackEvent] = fixEvent;
 					});
 				},
 				teardown: function() {
 					var self = this;
 					$.each(eventHandlers, function(index, fallbackEvent) {
-						if(self.addEventListener) self.removeEventListener(fallbackEvent, fixEvent, false);
+						if (self.addEventListener) self.removeEventListener(fallbackEvent, fixEvent, false);
 						else self['on' + fallbackEvent] = null;
 					});
 				}
@@ -147,27 +148,27 @@
 			e = $.event.fix(origEvent);
 			e.type = eventPrefix + targetEventName;
 
-			if(origEvent.pointerType) {
-				switch(origEvent.pointerType) {
+			if (origEvent.pointerType) {
+				switch (origEvent.pointerType) {
 					case 2: e.pointerType = 'touch'; break;
 					case 3: e.pointerType = 'pen'; break;
 					case 4: e.pointerType = 'mouse'; break;
 					default: e.pointerType = origEvent.pointerType;
 				}
 			} else {
-				e.pointerType = origEvent.type.substr(0,5); // "mouse" or "touch" word length
+				e.pointerType = origEvent.type.substr(0, 5); // "mouse" or "touch" word length
 			}
 
-			if(!e.pageX && !e.pageY) {
+			if (!e.pageX && !e.pageY) {
 				touchEventData = origEvent.changedTouches ? origEvent.changedTouches[0] : origEvent;
 				e.pageX = touchEventData.pageX;
 				e.pageY = touchEventData.pageY;
 			}
 
-			if(origEvent.type === 'touchend') {
-				lastTouch = {x: e.pageX, y: e.pageY};
+			if (origEvent.type === 'touchend') {
+				lastTouch = { x: e.pageX, y: e.pageY };
 			}
-			if(e.pointerType === 'mouse' && lastTouch && mouseEventSimulated(e)) {
+			if (e.pointerType === 'mouse' && lastTouch && mouseEventSimulated(e)) {
 				return;
 			} else {
 				return ($.event.dispatch || $.event.handle).call(this, e);
@@ -184,14 +185,14 @@
 			setup: function() {
 				var self = this;
 				$.each(wheelEvents, function(index, fallbackEvent) {
-					if(self.addEventListener) self.addEventListener(fallbackEvent, fixEvent, false);
+					if (self.addEventListener) self.addEventListener(fallbackEvent, fixEvent, false);
 					else self['on' + fallbackEvent] = fixEvent;
 				});
 			},
 			teardown: function() {
 				var self = this;
 				$.each(wheelEvents, function(index, fallbackEvent) {
-					if(self.addEventListener) self.removeEventListener(fallbackEvent, fixEvent, false);
+					if (self.addEventListener) self.removeEventListener(fallbackEvent, fixEvent, false);
 					else self['on' + fallbackEvent] = null;
 				});
 			}
@@ -201,18 +202,18 @@
 			var origEvent = e || window.event;
 			e = $.event.fix(origEvent);
 			e.type = shimEventName;
-		
+
 			// old wheel events handler
-			if('detail'      in origEvent) { e.deltaY = -origEvent.detail;      }
-			if('wheelDelta'  in origEvent) { e.deltaY = -origEvent.wheelDelta;  }
-			if('wheelDeltaY' in origEvent) { e.deltaY = -origEvent.wheelDeltaY; }
-			if('wheelDeltaX' in origEvent) { e.deltaX = -origEvent.wheelDeltaX; }
+			if ('detail'      in origEvent) { e.deltaY = -origEvent.detail;      }
+			if ('wheelDelta'  in origEvent) { e.deltaY = -origEvent.wheelDelta;  }
+			if ('wheelDeltaY' in origEvent) { e.deltaY = -origEvent.wheelDeltaY; }
+			if ('wheelDeltaX' in origEvent) { e.deltaX = -origEvent.wheelDeltaX; }
 
 			// modern wheel event handler
-			if('deltaY' in origEvent) {
+			if ('deltaY' in origEvent) {
 				e.deltaY = origEvent.deltaY;
 			}
-			if('deltaX' in origEvent) {
+			if ('deltaX' in origEvent) {
 				e.deltaX = origEvent.deltaX;
 			}
 
@@ -234,12 +235,12 @@
 		// provide function for firing native events
 		fireNativeEvent: function(elements, eventName) {
 			$(elements).each(function() {
-				var element = this, eventObject;					
-				if(element.dispatchEvent) {
+				var element = this, eventObject;
+				if (element.dispatchEvent) {
 					eventObject = document.createEvent('HTMLEvents');
 					eventObject.initEvent(eventName, true, true);
 					element.dispatchEvent(eventObject);
-				} else if(document.createEventObject) {
+				} else if (document.createEventObject) {
 					eventObject = document.createEventObject();
 					eventObject.target = element;
 					element.fireEvent('on' + eventName, eventObject);
@@ -250,7 +251,7 @@
 		bindHandlers: function() {
 			var self = this;
 			$.each(self, function(propName, propValue) {
-				if(propName.indexOf('on') === 0 && $.isFunction(propValue)) {
+				if (propName.indexOf('on') === 0 && $.isFunction(propValue)) {
 					// dont use $.proxy here because it doesn't create unique handler
 					self[propName] = function() {
 						return propValue.apply(self, arguments);
@@ -267,9 +268,9 @@
 			return $.extend({}, commonOptions);
 		},
 		setOptions: function(moduleName, moduleOptions) {
-			if(arguments.length > 1) {
+			if (arguments.length > 1) {
 				// set module options
-				if(this.modules[moduleName]) {
+				if (this.modules[moduleName]) {
 					$.extend(this.modules[moduleName].prototype.options, moduleOptions);
 				}
 			} else {
@@ -289,7 +290,7 @@
 
 				// bind event handlers to instance
 				this.bindHandlers();
-				
+
 				// call constructor
 				this.init.apply(this, arguments);
 			};
@@ -299,7 +300,7 @@
 
 			// add mixin methods to module proto
 			$.extend(proto, moduleMixin);
-			if(proto.plugins) {
+			if (proto.plugins) {
 				$.each(proto.plugins, function(pluginName, plugin) {
 					$.extend(plugin.prototype, moduleMixin);
 				});
@@ -310,14 +311,14 @@
 			Module.prototype.destroy = function() {
 				this.options.element.removeData(this.options.dataKey);
 
-				for(var i = customInstances.length - 1; i >= 0; i--) {
-					if(customInstances[i] === this) {
+				for (var i = customInstances.length - 1; i >= 0; i--) {
+					if (customInstances[i] === this) {
 						customInstances.splice(i, 1);
 						break;
 					}
 				}
 
-				if(originalDestroy) {
+				if (originalDestroy) {
 					originalDestroy.apply(this, arguments);
 				}
 			};
@@ -332,7 +333,7 @@
 			var self = this,
 				instance;
 
-			if(!commonOptions.styleSheetCreated) {
+			if (!commonOptions.styleSheetCreated) {
 				createStyleSheet();
 			}
 
@@ -341,19 +342,19 @@
 					element = $(this);
 
 				instance = element.data(commonOptions.dataKey);
-				if(instance) {
+				if (instance) {
 					instance.refresh();
 				} else {
-					if(!moduleName) {
+					if (!moduleName) {
 						$.each(self.modules, function(currentModuleName, module) {
-							if(module.prototype.matchElement.call(module.prototype, element)) {
+							if (module.prototype.matchElement.call(module.prototype, element)) {
 								moduleName = currentModuleName;
 								return false;
 							}
 						});
 					}
-					if(moduleName) {
-						moduleOptions = $.extend({element:element}, customOptions);
+					if (moduleName) {
+						moduleOptions = $.extend({ element: element }, customOptions);
 						instance = new self.modules[moduleName](moduleOptions);
 					}
 				}
@@ -363,7 +364,7 @@
 		refresh: function(elements) {
 			$(elements).each(function() {
 				var instance = $(this).data(commonOptions.dataKey);
-				if(instance) {
+				if (instance) {
 					instance.refresh();
 				}
 			});
@@ -371,7 +372,7 @@
 		destroy: function(elements) {
 			$(elements).each(function() {
 				var instance = $(this).data(commonOptions.dataKey);
-				if(instance) {
+				if (instance) {
 					instance.destroy();
 				}
 			});
@@ -385,34 +386,33 @@
 			});
 		},
 		refreshAll: function(context) {
-			if(context) {
+			if (context) {
 				$.each(this.modules, function(moduleName, module) {
 					$(module.prototype.selector, context).each(function() {
 						var instance = $(this).data(commonOptions.dataKey);
-						if(instance) {
+						if (instance) {
 							instance.refresh();
 						}
 					});
 				});
 			} else {
-				for(var i = customInstances.length - 1; i >= 0; i--) {
+				for (var i = customInstances.length - 1; i >= 0; i--) {
 					customInstances[i].refresh();
 				}
 			}
 		},
 		destroyAll: function(context) {
-			var self = this;
-			if(context) {
+			if (context) {
 				$.each(this.modules, function(moduleName, module) {
 					$(module.prototype.selector, context).each(function(index, element) {
 						var instance = $(element).data(commonOptions.dataKey);
-						if(instance) {
+						if (instance) {
 							instance.destroy();
 						}
 					});
 				});
 			} else {
-				while(customInstances.length) {
+				while (customInstances.length) {
 					customInstances[0].destroy();
 				}
 			}

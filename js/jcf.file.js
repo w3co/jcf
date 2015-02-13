@@ -3,10 +3,10 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function($, window) {
+;(function($) {
 	'use strict';
 
 	jcf.addModule({
@@ -24,7 +24,7 @@
 		matchElement: function(element) {
 			return element.is('input[type="file"]');
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.refresh();
@@ -44,8 +44,8 @@
 		attachEvents: function() {
 			this.realElement.on({
 				'jcf-pointerdown': this.onPress,
-				'change': this.onChange,
-				'focus': this.onFocus
+				change: this.onChange,
+				focus: this.onFocus
 			});
 		},
 		onChange: function() {
@@ -67,20 +67,20 @@
 			this.fakeElement.removeClass(this.options.pressedClass);
 			this.doc.off('jcf-pointerup', this.onRelease);
 		},
-		getFileName: function(){
+		getFileName: function() {
 			return this.realElement.val().replace(/^[\s\S]*(?:\\|\/)([\s\S^\\\/]*)$/g, '$1');
 		},
-		getFileExtension: function(){
+		getFileExtension: function() {
 			var fileName = this.realElement.val();
 			return fileName.lastIndexOf('.') < 0 ? '' : fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 		},
-		updateExtensionClass: function(){
+		updateExtensionClass: function() {
 			var currentExtension = this.getFileExtension(),
 				currentClassList = this.fakeElement.prop('className'),
 				cleanedClassList = currentClassList.replace(new RegExp('(\\s|^)' + this.options.extensionPrefixClass + '[^ ]+','gi'), '');
 
 			this.fakeElement.prop('className', cleanedClassList);
-			if(currentExtension) {
+			if (currentExtension) {
 				this.fakeElement.addClass(this.options.extensionPrefixClass + currentExtension);
 			}
 		},
@@ -101,12 +101,12 @@
 			// remove event handlers
 			this.realElement.off({
 				'jcf-pointerdown': this.onPress,
-				'change': this.onChange,
-				'focus': this.onFocus,
-				'blur': this.onBlur
+				change: this.onChange,
+				focus: this.onFocus,
+				blur: this.onBlur
 			});
 			this.doc.off('jcf-pointerup', this.onRelease);
 		}
 	});
 
-}(jQuery, this));
+}(jQuery));

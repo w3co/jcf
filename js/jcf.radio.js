@@ -3,10 +3,10 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function($, window) {
+;(function($) {
 	'use strict';
 
 	jcf.addModule({
@@ -22,7 +22,7 @@
 		matchElement: function(element) {
 			return element.is(':radio');
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.refresh();
@@ -34,7 +34,7 @@
 			this.fakeElement = $(this.options.fakeStructure).insertAfter(this.realElement);
 			this.labelElement = this.getLabelFor();
 
-			if(this.options.wrapNative) {
+			if (this.options.wrapNative) {
 				// wrap native radio inside fake block
 				this.realElement.prependTo(this.fakeElement).css({
 					position: 'absolute',
@@ -64,18 +64,18 @@
 		},
 		onFakeClick: function(e) {
 			// skip event if clicked on real element inside wrapper
-			if(this.options.wrapNative && this.realElement.is(e.target)) {
+			if (this.options.wrapNative && this.realElement.is(e.target)) {
 				return;
 			}
 
 			// toggle checked class
-			if(!this.realElement.is(':disabled')) {
+			if (!this.realElement.is(':disabled')) {
 				delete this.savedEventObject;
 				this.currentActiveRadio = this.getCurrentActiveRadio();
 				this.stateChecked = this.realElement.prop('checked');
 				this.realElement.prop('checked', true);
 				this.fireNativeEvent(this.realElement, 'click');
-				if(this.savedEventObject && this.savedEventObject.isDefaultPrevented()) {
+				if (this.savedEventObject && this.savedEventObject.isDefaultPrevented()) {
 					this.realElement.prop('checked', this.stateChecked);
 					this.currentActiveRadio.prop('checked', true);
 				} else {
@@ -85,21 +85,21 @@
 			}
 		},
 		onFocus: function() {
-			if(!this.pressedFlag || !this.focusedFlag) {
+			if (!this.pressedFlag || !this.focusedFlag) {
 				this.focusedFlag = true;
 				this.fakeElement.addClass(this.options.focusClass);
 				this.realElement.on('blur', this.onBlur);
 			}
 		},
 		onBlur: function() {
-			if(!this.pressedFlag) {
+			if (!this.pressedFlag) {
 				this.focusedFlag = false;
 				this.fakeElement.removeClass(this.options.focusClass);
 				this.realElement.off('blur', this.onBlur);
 			}
 		},
 		onPress: function(e) {
-			if(!this.focusedFlag && e.pointerType === 'mouse') {
+			if (!this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = true;
@@ -107,7 +107,7 @@
 			this.doc.on('jcf-pointerup', this.onRelease);
 		},
 		onRelease: function(e) {
-			if(this.focusedFlag && e.pointerType === 'mouse') {
+			if (this.focusedFlag && e.pointerType === 'mouse') {
 				this.realElement.focus();
 			}
 			this.pressedFlag = false;
@@ -122,8 +122,8 @@
 			var name = radio.attr('name'),
 				parentForm = radio.parents('form');
 
-			if(name) {
-				if(parentForm.length) {
+			if (name) {
+				if (parentForm.length) {
 					return parentForm.find('input[name="' + name + '"]');
 				} else {
 					return $('input[name="' + name + '"]:not(form input)');
@@ -136,7 +136,7 @@
 			var parentLabel = this.realElement.closest('label'),
 				elementId = this.realElement.prop('id');
 
-			if(!parentLabel.length && elementId) {
+			if (!parentLabel.length && elementId) {
 				parentLabel = $('label[for="' + elementId + '"]');
 			}
 			return parentLabel.length ? parentLabel : null;
@@ -156,13 +156,13 @@
 							.toggleClass(this.options.uncheckedClass, !isChecked)
 							.toggleClass(this.options.disabledClass, isDisabled);
 
-			if(this.labelElement) {
+			if (this.labelElement) {
 				this.labelElement.toggleClass(this.options.labelActiveClass, isChecked);
 			}
 		},
 		destroy: function() {
 			// restore structure
-			if(this.options.wrapNative) {
+			if (this.options.wrapNative) {
 				this.realElement.insertBefore(this.fakeElement).css({
 					position: '',
 					width: '',
@@ -188,4 +188,4 @@
 		}
 	});
 
-}(jQuery, this));
+}(jQuery));

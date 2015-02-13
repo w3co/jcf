@@ -3,10 +3,10 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function($, window) {
+;(function($) {
 	'use strict';
 
 	jcf.addModule({
@@ -22,7 +22,7 @@
 		matchElement: function(element) {
 			return element.is(this.selector);
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.refresh();
@@ -45,13 +45,13 @@
 			this.maxValue = isNaN(this.maxValue) ? Infinity : this.maxValue;
 
 			// handle range
-			if(isFinite(this.maxValue)) {
+			if (isFinite(this.maxValue)) {
 				this.maxValue -= (this.maxValue - this.minValue) % this.stepValue;
 			}
 		},
 		attachEvents: function() {
 			this.realElement.on({
-				'focus': this.onFocus
+				focus: this.onFocus
 			});
 			this.btnDec.add(this.btnInc).on('jcf-pointerdown', this.onBtnPress);
 		},
@@ -59,7 +59,7 @@
 			var self = this,
 				increment;
 
-			if(!this.realElement.is(':disabled')) {
+			if (!this.realElement.is(':disabled')) {
 				increment = this.btnInc.is(e.currentTarget);
 
 				self.step(increment);
@@ -78,19 +78,19 @@
 		onFocus: function() {
 			this.fakeElement.addClass(this.options.focusClass);
 			this.realElement.on({
-				'blur': this.onBlur,
-				'keydown': this.onKeyPress
+				blur: this.onBlur,
+				keydown: this.onKeyPress
 			});
 		},
 		onBlur: function() {
 			this.fakeElement.removeClass(this.options.focusClass);
 			this.realElement.off({
-				'blur': this.onBlur,
-				'keydown': this.onKeyPress
+				blur: this.onBlur,
+				keydown: this.onKeyPress
 			});
 		},
 		onKeyPress: function(e) {
-			if(e.which === 38 || e.which === 40) {
+			if (e.which === 38 || e.which === 40) {
 				e.preventDefault();
 				this.step(e.which === 38);
 			}
@@ -103,8 +103,8 @@
 				diff = Math.abs(edgeNumber - newValue) % this.stepValue;
 
 			// handle step diff
-			if(diff) {
-				if(increment) {
+			if (diff) {
+				if (increment) {
 					newValue += addValue - diff;
 				} else {
 					newValue -= diff;
@@ -114,26 +114,28 @@
 			}
 
 			// handle min/max limits
-			if(newValue < this.minValue) {
+			if (newValue < this.minValue) {
 				newValue = this.minValue;
-			} else if(newValue > this.maxValue) {
+			} else if (newValue > this.maxValue) {
 				newValue = this.maxValue;
 			}
 
 			// update value in real input if its changed
-			if(newValue !== originalValue) {
+			if (newValue !== originalValue) {
 				this.realElement.val(newValue).trigger('change');
 				this.refresh();
 			}
 		},
 		refresh: function() {
+			var isDisabled = this.realElement.is(':disabled'),
+				currentValue = parseFloat(this.realElement.val());
+
 			// handle disabled state
-			var isDisabled = this.realElement.is(':disabled');
 			this.fakeElement.toggleClass(this.options.disabledClass, isDisabled);
 
 			// refresh button classes
-			this.btnDec.toggleClass(this.options.disabledClass, this.realElement.val() == this.minValue);
-			this.btnInc.toggleClass(this.options.disabledClass, this.realElement.val() == this.maxValue);
+			this.btnDec.toggleClass(this.options.disabledClass, currentValue === this.minValue);
+			this.btnInc.toggleClass(this.options.disabledClass, currentValue === this.maxValue);
 		},
 		destroy: function() {
 			// restore original structure
@@ -144,11 +146,11 @@
 			// remove event handlers
 			this.page.off('jcf-pointerup', this.onBtnRelease);
 			this.realElement.off({
-				'keydown': this.onKeyPress,
-				'focus': this.onFocus,
-				'blur': this.onBlur
+				keydown: this.onKeyPress,
+				focus: this.onFocus,
+				blur: this.onBlur
 			});
 		}
 	});
 
-}(jQuery, this));
+}(jQuery));

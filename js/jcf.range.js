@@ -3,10 +3,10 @@
  *
  * Copyright 2014 PSD2HTML (http://psd2html.com)
  * Released under the MIT license (LICENSE.txt)
- * 
+ *
  * Version: 1.0.3
  */
-;(function($, window) {
+;(function($) {
 	'use strict';
 
 	jcf.addModule({
@@ -28,7 +28,7 @@
 		matchElement: function(element) {
 			return element.is(this.selector);
 		},
-		init: function(options) {
+		init: function() {
 			this.initStructure();
 			this.attachEvents();
 			this.refresh();
@@ -47,7 +47,7 @@
 			this.eventProperty = this.isVertical ? 'pageY' : 'pageX';
 			this.sizeMethod = this.isVertical ? 'innerHeight' : 'innerWidth';
 			this.fakeElement.css('touchAction', this.isVertical ? 'pan-x' : 'pan-y');
-			if(this.isVertical) {
+			if (this.isVertical) {
 				this.fakeElement.addClass(this.options.verticalClass);
 			}
 
@@ -61,7 +61,7 @@
 			this.maxValue = isNaN(this.maxValue) ? 100 : this.maxValue;
 
 			// handle range
-			if(this.stepValue !== 1) {
+			if (this.stepValue !== 1) {
 				this.maxValue -= (this.maxValue - this.minValue) % this.stepValue;
 			}
 			this.stepsCount = (this.maxValue - this.minValue) / this.stepValue + 1;
@@ -69,7 +69,7 @@
 		},
 		attachEvents: function() {
 			this.realElement.on({
-				'focus': this.onFocus
+				focus: this.onFocus
 			});
 			this.handle.on('jcf-pointerdown', this.onPress);
 		},
@@ -78,12 +78,12 @@
 				dataValues = [],
 				dataListId = this.realElement.attr('list');
 
-			if(dataListId) {
+			if (dataListId) {
 				$('#' + dataListId).find('option').each(function() {
 					var itemValue = parseFloat(this.value || this.innerHTML),
 						mark, markOffset;
 
-					if(!isNaN(itemValue)) {
+					if (!isNaN(itemValue)) {
 						markOffset = self.valueToOffset(itemValue);
 						dataValues.push({
 							value: itemValue,
@@ -94,7 +94,7 @@
 						}).css(self.offsetProperty, markOffset + '%').appendTo(self.track);
 					}
 				});
-				if(dataValues.length) {
+				if (dataValues.length) {
 					self.dataValues = dataValues;
 				}
 			}
@@ -103,7 +103,7 @@
 			var trackSize, trackOffset, innerOffset;
 
 			e.preventDefault();
-			if(!this.realElement.is(':disabled')) {
+			if (!this.realElement.is(':disabled')) {
 				trackSize = this.track[this.sizeMethod]();
 				trackOffset = this.track.offset()[this.directionProperty];
 				innerOffset = this.options.dragHandleCenter ? this.handle[this.sizeMethod]() / 2 : e[this.eventProperty] - this.handle.offset()[this.directionProperty];
@@ -120,7 +120,7 @@
 					'jcf-pointerup': this.onRelease
 				});
 
-				if(e.pointerType === 'mouse') {
+				if (e.pointerType === 'mouse') {
 					this.realElement.focus();
 				}
 			}
@@ -130,21 +130,21 @@
 				newOffset, dragPercent, stepIndex, valuePercent;
 
 			// calculate offset
-			if(this.isVertical) {
+			if (this.isVertical) {
 				newOffset = this.dragData.max + (this.dragData.min - e[this.eventProperty]) - this.dragData.innerOffset;
 			} else {
 				newOffset = e[this.eventProperty] - this.dragData.innerOffset;
 			}
 
 			// fit in range
-			if(newOffset < this.dragData.min) {
+			if (newOffset < this.dragData.min) {
 				newOffset = this.dragData.min;
-			} else if(newOffset > this.dragData.max) {
+			} else if (newOffset > this.dragData.max) {
 				newOffset = this.dragData.max;
 			}
 
 			e.preventDefault();
-			if(this.options.snapToMarks && this.dataValues) {
+			if (this.options.snapToMarks && this.dataValues) {
 				// snap handle to marks
 				var dragOffset = newOffset - this.dragData.trackOffset;
 				dragPercent = (newOffset - this.dragData.trackOffset) / this.dragData.trackSize * 100;
@@ -153,8 +153,8 @@
 					var markOffset = item.offset / 100 * self.dragData.trackSize,
 						markMin = markOffset - self.options.snapRadius,
 						markMax = markOffset + self.options.snapRadius;
-					
-					if(dragOffset >= markMin && dragOffset <= markMax) {
+
+					if (dragOffset >= markMin && dragOffset <= markMax) {
 						dragPercent = item.offset;
 						return false;
 					}
@@ -166,7 +166,7 @@
 			stepIndex = Math.round(dragPercent * this.stepsCount / 100);
 			valuePercent = stepIndex * (100 / this.stepsCount);
 
-			if(this.dragData.stepIndex !== stepIndex) {
+			if (this.dragData.stepIndex !== stepIndex) {
 				this.dragData.stepIndex = stepIndex;
 				this.dragData.offset = valuePercent;
 				this.handle.css(this.offsetProperty, this.dragData.offset + '%');
@@ -174,7 +174,7 @@
 		},
 		onRelease: function() {
 			var newValue;
-			if(typeof this.dragData.offset === 'number') {
+			if (typeof this.dragData.offset === 'number') {
 				newValue = this.stepIndexToValue(this.dragData.stepIndex);
 				this.realElement.val(newValue).trigger('change');
 			}
@@ -188,22 +188,22 @@
 		onFocus: function() {
 			this.fakeElement.addClass(this.options.focusClass);
 			this.realElement.on({
-				'blur': this.onBlur,
-				'keydown': this.onKeyPress
+				blur: this.onBlur,
+				keydown: this.onKeyPress
 			});
 		},
 		onBlur: function() {
 			this.fakeElement.removeClass(this.options.focusClass);
 			this.realElement.off({
-				'blur': this.onBlur,
-				'keydown': this.onKeyPress
+				blur: this.onBlur,
+				keydown: this.onKeyPress
 			});
 		},
 		onKeyPress: function(e) {
 			var incValue = (e.which === 38 || e.which === 39),
 				decValue = (e.which === 37 || e.which === 40);
 
-			if(decValue || incValue) {
+			if (decValue || incValue) {
 				e.preventDefault();
 				this.step(incValue ? this.stepValue : -this.stepValue);
 			}
@@ -211,20 +211,20 @@
 		step: function(changeValue) {
 			var originalValue = parseFloat(this.realElement.val()),
 				newValue = originalValue;
-			
-			if(isNaN(originalValue)) {
+
+			if (isNaN(originalValue)) {
 				newValue = 0;
 			}
 
 			newValue += changeValue;
 
-			if(newValue > this.maxValue) {
+			if (newValue > this.maxValue) {
 				newValue = this.maxValue;
-			} else if(newValue < this.minValue) {
+			} else if (newValue < this.minValue) {
 				newValue = this.minValue;
 			}
 
-			if(newValue !== originalValue) {
+			if (newValue !== originalValue) {
 				this.realElement.val(newValue).trigger('change');
 				this.setSliderValue(newValue);
 			}
@@ -256,11 +256,11 @@
 			this.fakeElement.remove();
 
 			this.realElement.off({
-				'keydown': this.onKeyPress,
-				'focus': this.onFocus,
-				'blur': this.onBlur
+				keydown: this.onKeyPress,
+				focus: this.onFocus,
+				blur: this.onBlur
 			});
 		}
 	});
 
-}(jQuery, this));
+}(jQuery));
