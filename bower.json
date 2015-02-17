@@ -1,0 +1,32 @@
+{
+  "name": "jcf",
+  "version": "1.0.3",
+  "homepage": "http://psd2html.com/jcf",
+  "authors": [
+    "psd2html"
+  ],
+  "description": "This script allows smooth cross-browser customization of form elements with CSS",
+  "main": "./js/jcf.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "jQuery",
+    "JCF",
+    "form",
+    "element",
+    "style"
+  ],
+  "license": "MIT",
+  "ignore": [
+    ".jshintrc",
+    ".jscsrc",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
