@@ -1,7 +1,7 @@
 # JCF - JavaScript Custom Forms
 This library allows crossbrowser customization of form elements using CSS.
 
-Check [live demo](http://w3co.github.io/jcf/).
+Check [live demo](http://psd2html.com/jcf).
 
 ## Browser support
 The script was tested in the following browsers:
