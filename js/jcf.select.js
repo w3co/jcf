@@ -13,7 +13,8 @@
 		name: 'Select',
 		selector: 'select',
 		options: {
-			element: null
+			element: null,
+			multipleCompactStyle: false
 		},
 		plugins: {
 			ListBox: ListBox,
@@ -34,7 +35,7 @@
 			if (this.instance) {
 				this.instance.destroy();
 			}
-			if (this.isListBox()) {
+			if (this.isListBox() && !this.options.multipleCompactStyle) {
 				this.instance = new ListBox(this.options);
 			} else {
 				this.instance = new ComboBox(this.options);
@@ -94,6 +95,11 @@
 
 			// copy classes from original select
 			this.fakeElement.addClass(getPrefixedClasses(this.realElement.prop('className'), this.options.selectClassPrefix));
+
+			// handle compact multiple style
+			if (this.realElement.prop('multiple')) {
+				this.fakeElement.addClass('jcf-compact-multiple');
+			}
 
 			// detect device type and dropdown behavior
 			if (this.options.isMobileDevice && this.options.wrapNativeOnMobile && !this.options.wrapNative) {
@@ -226,8 +232,14 @@
 			}
 		},
 		onSelect: function() {
-			this.hideDropdown();
 			this.refresh();
+
+			if (this.realElement.prop('multiple')) {
+				this.repositionDropdown();
+			} else {
+				this.hideDropdown();
+			}
+
 			this.fireNativeEvent(this.realElement, 'change');
 		},
 		toggleListMode: function(state) {
@@ -258,6 +270,11 @@
 			this.dropdown.addClass(getPrefixedClasses(this.realElement.prop('className'), this.options.selectClassPrefix));
 			makeUnselectable(this.dropdown);
 
+			// handle compact multiple style
+			if (this.realElement.prop('multiple')) {
+				this.dropdown.addClass('jcf-compact-multiple');
+			}
+
 			// set initial styles for dropdown in body
 			if (this.options.fakeDropInBody) {
 				this.dropdown.css({
@@ -274,6 +291,7 @@
 				maxVisibleItems: this.options.maxVisibleItems,
 				useCustomScroll: this.options.useCustomScroll,
 				holder: this.dropdown.find(this.options.dropContentSelector),
+				multipleSelectWithoutKey: this.realElement.prop('multiple'),
 				element: this.realElement
 			});
 			$(this.list).on({
@@ -368,9 +386,17 @@
 			var selectedIndex = this.realElement.prop('selectedIndex'),
 				selectedOption = this.realElement.prop('options')[selectedIndex],
 				selectedOptionImage = selectedOption ? selectedOption.getAttribute('data-image') : null,
+				selectedOptionText = '',
 				selectedOptionClasses;
 
-			if (!selectedOption) {
+			if (this.realElement.prop('multiple')) {
+				$.each(this.realElement.prop('options'), function(index, option) {
+					if (option.selected) {
+						selectedOptionText += (selectedOptionText ? ', ' : '') + option.innerHTML;
+					}
+				});
+				this.selectText.removeAttr('class').html(selectedOptionText);
+			} else if (!selectedOption) {
 				if (this.selectImage) {
 					this.selectImage.hide();
 				}
@@ -545,6 +571,7 @@
 			useHoverClass: false,
 			useCustomScroll: false,
 			handleResize: true,
+			multipleSelectWithoutKey: false,
 			alwaysPreventMouseWheel: false,
 			indexAttribute: 'data-index',
 			cloneClassPrefix: 'jcf-option-',
@@ -628,7 +655,7 @@
 			}
 
 			if (this.element.prop('multiple')) {
-				if (e.metaKey || e.ctrlKey || e.pointerType === 'touch') {
+				if (e.metaKey || e.ctrlKey || e.pointerType === 'touch' || this.options.multipleSelectWithoutKey) {
 					// if CTRL/CMD pressed or touch devices - toggle selected option
 					this.realOptions[clickedIndex].selected = !this.realOptions[clickedIndex].selected;
 				} else if (e.shiftKey) {
