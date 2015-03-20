@@ -381,7 +381,9 @@
 			var self = this;
 			$.each(this.modules, function(moduleName, module) {
 				$(module.prototype.selector, context).each(function() {
-					self.replace(this, moduleName);
+					if (this.className.indexOf('jcf-ignore') < 0) {
+						self.replace(this, moduleName);
+					}
 				});
 			});
 		},
