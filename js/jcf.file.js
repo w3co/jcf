@@ -68,7 +68,18 @@
 			this.doc.off('jcf-pointerup', this.onRelease);
 		},
 		getFileName: function() {
-			return this.realElement.val().replace(/^[\s\S]*(?:\\|\/)([\s\S^\\\/]*)$/g, '$1');
+			var resultFileName = '',
+				files = this.realElement.prop('files');
+
+			if (files && files.length) {
+				$.each(files, function(index, file) {
+					resultFileName += (index > 0 ? ', ' : '') + file.name;
+				});
+			} else {
+				resultFileName = this.realElement.val().replace(/^[\s\S]*(?:\\|\/)([\s\S^\\\/]*)$/g, '$1');
+			}
+
+			return resultFileName;
 		},
 		getFileExtension: function() {
 			var fileName = this.realElement.val();
