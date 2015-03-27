@@ -258,10 +258,16 @@
 			var incValue = (e.which === 38 || e.which === 39),
 				decValue = (e.which === 37 || e.which === 40);
 
-			// handle TAB key for slider with "multiple" attribute
-			if (e.which === 9 && this.handleCount > 1 && this.activeDragHandleIndex < this.handleCount - 1) {
+			// handle TAB key in slider with multiple handles
+			if (e.which === 9 && this.handleCount > 1) {
+				if (e.shiftKey && this.activeDragHandleIndex > 0) {
+					this.activeDragHandleIndex--;
+				} else if (!e.shiftKey && this.activeDragHandleIndex < this.handleCount - 1) {
+					this.activeDragHandleIndex++;
+				} else {
+					return;
+				}
 				e.preventDefault();
-				this.activeDragHandleIndex++;
 				this.handles.removeClass(this.options.activeHandleClass).eq(this.activeDragHandleIndex).addClass(this.options.activeHandleClass);
 			}
 
@@ -316,7 +322,6 @@
 			if (newValue !== originalValue) {
 				this.values[this.activeDragHandleIndex || 0] = '' + newValue;
 				this.updateValues();
-				// console.log(this.values);
 				this.realElement.trigger('input').trigger('change');
 				this.setSliderValue(this.values);
 			}
