@@ -536,7 +536,10 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	width: 3px;
 	height: 1px;
 }
-.jcf-range.jcf-focus .jcf-range-handle {
+.jcf-range .jcf-active-handle {
+	z-index: 2;
+}
+.jcf-range.jcf-focus .jcf-active-handle {
 	border: 1px solid #f00;
 	margin: -5px 0 0 -1px;
 }

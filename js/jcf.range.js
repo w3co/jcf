@@ -19,6 +19,7 @@
 			dragValueDisplay: '<span class="jcf-drag-value"></span>',
 			handleSelector: '.jcf-range-handle',
 			trackSelector: '.jcf-range-track',
+			activeHandleClass: 'jcf-active-handle',
 			verticalClass: 'jcf-vertical',
 			orientation: 'horizontal',
 			dragHandleCenter: true,
@@ -39,6 +40,22 @@
 			this.fakeElement = $(this.options.fakeStructure).insertBefore(this.realElement).prepend(this.realElement);
 			this.track = this.fakeElement.find(this.options.trackSelector);
 			this.handle = this.fakeElement.find(this.options.handleSelector);
+			this.createdHandleCount = 0;
+			this.activeDragHandleIndex = 0;
+			this.values = this.realElement.prop('multiple') ? this.realElement.attr('value').split(',') : [this.realElement.val()];
+			this.handleCount = this.realElement.prop('multiple') ? this.values.length : 1;
+
+			// clone handles if needed
+			while (this.createdHandleCount < this.handleCount) {
+				this.createdHandleCount++;
+				this.handle.clone().addClass('jcf-index-' + this.createdHandleCount).insertBefore(this.handle);
+			}
+
+			// grab all handles
+			this.handle.detach();
+			this.handle = null;
+			this.handles = this.fakeElement.find(this.options.handleSelector);
+			this.handles.eq(0).addClass(this.options.activeHandleClass);
 
 			// handle orientation
 			this.isVertical = (this.options.orientation === 'vertical');
@@ -64,14 +81,14 @@
 			if (this.stepValue !== 1) {
 				this.maxValue -= (this.maxValue - this.minValue) % this.stepValue;
 			}
-			this.stepsCount = (this.maxValue - this.minValue) / this.stepValue + 1;
+			this.stepsCount = (this.maxValue - this.minValue) / this.stepValue;
 			this.createDataList();
 		},
 		attachEvents: function() {
 			this.realElement.on({
 				focus: this.onFocus
 			});
-			this.handle.on('jcf-pointerdown', this.onPress);
+			this.handles.on('jcf-pointerdown', this.onPress);
 		},
 		createDataList: function() {
 			var self = this,
@@ -99,14 +116,34 @@
 				}
 			}
 		},
+		getDragHandleRange: function(handleIndex) {
+			// calculate range for slider with multiple handles
+			var minStep = -Infinity,
+				maxStep = Infinity;
+
+			if (handleIndex > 0) {
+				minStep = this.valueToStepIndex(this.values[handleIndex - 1]);
+			}
+			if (handleIndex < this.handleCount - 1) {
+				maxStep = this.valueToStepIndex(this.values[handleIndex + 1]);
+			}
+
+			return {
+				minStepIndex: minStep,
+				maxStepIndex: maxStep
+			};
+		},
 		onPress: function(e) {
 			var trackSize, trackOffset, innerOffset;
 
 			e.preventDefault();
-			if (!this.realElement.is(':disabled')) {
+			if (!this.realElement.is(':disabled') && !this.activeDragHandle) {
+				this.activeDragHandle = $(e.currentTarget);
+				this.activeDragHandleIndex = this.handles.index(this.activeDragHandle);
+				this.handles.removeClass(this.options.activeHandleClass).eq(this.activeDragHandleIndex).addClass(this.options.activeHandleClass);
 				trackSize = this.track[this.sizeMethod]();
 				trackOffset = this.track.offset()[this.directionProperty];
-				innerOffset = this.options.dragHandleCenter ? this.handle[this.sizeMethod]() / 2 : e[this.eventProperty] - this.handle.offset()[this.directionProperty];
+				innerOffset = this.options.dragHandleCenter ? this.activeDragHandle[this.sizeMethod]() / 2 : e[this.eventProperty] - this.handle.offset()[this.directionProperty];
 
 				this.dragData = {
 					trackSize: trackSize,
@@ -127,7 +164,7 @@
 		},
 		onMove: function(e) {
 			var self = this,
-				newOffset, dragPercent, stepIndex, valuePercent;
+				newOffset, dragPercent, stepIndex, valuePercent, handleDragRange;
 
 			// calculate offset
 			if (this.isVertical) {
@@ -163,13 +200,28 @@
 				// snap handle to steps
 				dragPercent = (newOffset - this.dragData.trackOffset) / this.dragData.trackSize * 100;
 			}
+
+			// move handle only in range
 			stepIndex = Math.round(dragPercent * this.stepsCount / 100);
+			if (this.handleCount > 1) {
+				handleDragRange = this.getDragHandleRange(this.activeDragHandleIndex);
+				if (stepIndex < handleDragRange.minStepIndex) {
+					stepIndex = Math.max(handleDragRange.minStepIndex, stepIndex);
+				} else if (stepIndex > handleDragRange.maxStepIndex) {
+					stepIndex = Math.min(handleDragRange.maxStepIndex, stepIndex);
+				}
+			}
 			valuePercent = stepIndex * (100 / this.stepsCount);
 
 			if (this.dragData.stepIndex !== stepIndex) {
 				this.dragData.stepIndex = stepIndex;
 				this.dragData.offset = valuePercent;
-				this.handle.css(this.offsetProperty, this.dragData.offset + '%');
+				this.activeDragHandle.css(this.offsetProperty, this.dragData.offset + '%');
+
+				// update value(s) and trigger "input" event
+				this.values[this.activeDragHandleIndex] = '' + this.stepIndexToValue(stepIndex);
+				this.updateValues();
+				this.realElement.trigger('input');
 			}
 		},
 		onRelease: function() {
@@ -183,14 +235,17 @@
 				'jcf-pointermove': this.onMove,
 				'jcf-pointerup': this.onRelease
 			});
+			delete this.activeDragHandle;
 			delete this.dragData;
 		},
 		onFocus: function() {
-			this.fakeElement.addClass(this.options.focusClass);
-			this.realElement.on({
-				blur: this.onBlur,
-				keydown: this.onKeyPress
-			});
+			if (!this.fakeElement.hasClass(this.options.focusClass)) {
+				this.fakeElement.addClass(this.options.focusClass);
+				this.realElement.on({
+					blur: this.onBlur,
+					keydown: this.onKeyPress
+				});
+			}
 		},
 		onBlur: function() {
 			this.fakeElement.removeClass(this.options.focusClass);
@@ -203,14 +258,39 @@
 			var incValue = (e.which === 38 || e.which === 39),
 				decValue = (e.which === 37 || e.which === 40);
 
+			// handle TAB key for slider with "multiple" attribute
+			if (e.which === 9 && this.handleCount > 1 && this.activeDragHandleIndex < this.handleCount - 1) {
+				e.preventDefault();
+				this.activeDragHandleIndex++;
+				this.handles.removeClass(this.options.activeHandleClass).eq(this.activeDragHandleIndex).addClass(this.options.activeHandleClass);
+			}
+
+			// handle cursor keys
 			if (decValue || incValue) {
 				e.preventDefault();
 				this.step(incValue ? this.stepValue : -this.stepValue);
 			}
 		},
+		updateValues: function() {
+			var value = this.values.join(',');
+			if (this.values.length > 1) {
+				this.realElement.prop('valueLow', this.values[0]);
+				this.realElement.prop('valueHigh', this.values[this.values.length - 1]);
+				this.realElement.val(value);
+
+				// if browser does not accept multiple values set only one
+				if (this.realElement.val() !== value) {
+					this.realElement.val(this.values[this.values.length - 1]);
+				}
+			} else {
+				this.realElement.val(value);
+			}
+		},
 		step: function(changeValue) {
-			var originalValue = parseFloat(this.realElement.val()),
-				newValue = originalValue;
+			var originalValue = parseFloat(this.values[this.activeDragHandleIndex || 0]),
+				newValue = originalValue,
+				minValue = this.minValue,
+				maxValue = this.maxValue;
 
 			if (isNaN(originalValue)) {
 				newValue = 0;
@@ -218,16 +298,31 @@
 
 			newValue += changeValue;
 
-			if (newValue > this.maxValue) {
-				newValue = this.maxValue;
-			} else if (newValue < this.minValue) {
-				newValue = this.minValue;
+			if (this.handleCount > 1) {
+				if (this.activeDragHandleIndex > 0) {
+					minValue = parseFloat(this.values[this.activeDragHandleIndex - 1]);
+				}
+				if (this.activeDragHandleIndex < this.handleCount - 1) {
+					maxValue = parseFloat(this.values[this.activeDragHandleIndex + 1]);
+				}
+			}
+
+			if (newValue > maxValue) {
+				newValue = maxValue;
+			} else if (newValue < minValue) {
+				newValue = minValue;
 			}
 
 			if (newValue !== originalValue) {
-				this.realElement.val(newValue).trigger('change');
-				this.setSliderValue(newValue);
+				this.values[this.activeDragHandleIndex || 0] = '' + newValue;
+				this.updateValues();
+				// console.log(this.values);
+				this.realElement.trigger('input').trigger('change');
+				this.setSliderValue(this.values);
 			}
+		},
+		valueToStepIndex: function(value) {
+			return (value - this.minValue) / this.stepValue;
 		},
 		stepIndexToValue: function(stepIndex) {
 			return this.minValue + this.stepValue * stepIndex;
@@ -238,9 +333,19 @@
 
 			return percent * 100;
 		},
-		setSliderValue: function(value) {
+		getSliderValue: function() {
+			var result = [];
+			$.each(this.values, function(index, value) {
+				result.push(parseFloat(value) || 0);
+			});
+			return result;
+		},
+		setSliderValue: function(values) {
 			// set handle position accordion according to value
-			this.handle.css(this.offsetProperty, this.valueToOffset(value) + '%');
+			var self = this;
+			this.handles.each(function(index, handle) {
+				handle.style[self.offsetProperty] = self.valueToOffset(values[index]) + '%';
+			});
 		},
 		refresh: function() {
 			// handle disabled state
@@ -248,8 +353,7 @@
 			this.fakeElement.toggleClass(this.options.disabledClass, isDisabled);
 
 			// refresh handle position according to current value
-			var realValue = parseFloat(this.realElement.val()) || 0;
-			this.setSliderValue(realValue);
+			this.setSliderValue(this.getSliderValue());
 		},
 		destroy: function() {
 			this.realElement.removeClass(this.options.hiddenClass).insertBefore(this.fakeElement);
