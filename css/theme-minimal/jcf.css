@@ -483,13 +483,13 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	margin: 0 20px 0 0;
 	position: relative;
 	display: block;
+	height: 10px;
 }
 .jcf-range .jcf-range-wrapper {
 	background: #e5e5e5;
 	border-radius: 5px;
 	display: block;
 	margin: 5px 0;
-	height: 10px;
 }
 .jcf-range.jcf-vertical {
 	min-width: 0;

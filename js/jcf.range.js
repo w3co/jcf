@@ -39,6 +39,7 @@
 			this.realElement = $(this.options.element).addClass(this.options.hiddenClass);
 			this.fakeElement = $(this.options.fakeStructure).insertBefore(this.realElement).prepend(this.realElement);
 			this.track = this.fakeElement.find(this.options.trackSelector);
+			this.trackHolder = this.track.parent();
 			this.handle = this.fakeElement.find(this.options.handleSelector);
 			this.createdHandleCount = 0;
 			this.activeDragHandleIndex = 0;
@@ -88,7 +89,8 @@
 			this.realElement.on({
 				focus: this.onFocus
 			});
-			this.handles.on('jcf-pointerdown', this.onPress);
+			this.trackHolder.on('jcf-pointerdown', this.onTrackPress);
+			this.handles.on('jcf-pointerdown', this.onHandlePress);
 		},
 		createDataList: function() {
 			var self = this,
@@ -133,7 +135,56 @@
 				maxStepIndex: maxStep
 			};
 		},
-		onPress: function(e) {
+		getNearestHandle: function(percent) {
+			// detect closest handle when track is pressed
+			var closestHandle = this.handles.eq(0),
+				closestDistance = Infinity;
+
+			if (this.handleCount > 1) {
+				this.handles.each(function() {
+					var handleOffset = parseFloat(this.style.left) / 100,
+						handleDistance = Math.abs(handleOffset - percent);
+
+					if (handleDistance < closestDistance) {
+						closestDistance = handleDistance;
+						closestHandle = $(this);
+					}
+				});
+			}
+			return closestHandle;
+		},
+		onTrackPress: function(e) {
+			var trackSize, trackOffset, innerOffset;
+
+			e.preventDefault();
+			if (!this.realElement.is(':disabled') && !this.activeDragHandle) {
+				trackSize = this.track[this.sizeMethod]();
+				trackOffset = this.track.offset()[this.directionProperty];
+				this.activeDragHandle = this.getNearestHandle((e.pageX - trackOffset) / this.trackHolder[this.sizeMethod]());
+				this.activeDragHandleIndex = this.handles.index(this.activeDragHandle);
+				this.handles.removeClass(this.options.activeHandleClass).eq(this.activeDragHandleIndex).addClass(this.options.activeHandleClass);
+				innerOffset = this.activeDragHandle[this.sizeMethod]() / 2;
+
+				this.dragData = {
+					trackSize: trackSize,
+					innerOffset: innerOffset,
+					trackOffset: trackOffset,
+					min: trackOffset,
+					max: trackOffset + trackSize
+				};
+				this.page.on({
+					'jcf-pointermove': this.onHandleMove,
+					'jcf-pointerup': this.onHandleRelease
+				});
+
+				if (e.pointerType === 'mouse') {
+					this.realElement.focus();
+				}
+
+				this.onHandleMove(e);
+			}
+		},
+		onHandlePress: function(e) {
 			var trackSize, trackOffset, innerOffset;
 
 			e.preventDefault();
@@ -153,8 +204,8 @@
 					max: trackOffset + trackSize
 				};
 				this.page.on({
-					'jcf-pointermove': this.onMove,
-					'jcf-pointerup': this.onRelease
+					'jcf-pointermove': this.onHandleMove,
+					'jcf-pointerup': this.onHandleRelease
 				});
 
 				if (e.pointerType === 'mouse') {
@@ -162,7 +213,7 @@
 				}
 			}
 		},
-		onMove: function(e) {
+		onHandleMove: function(e) {
 			var self = this,
 				newOffset, dragPercent, stepIndex, valuePercent, handleDragRange;
 
@@ -224,7 +275,7 @@
 				this.realElement.trigger('input');
 			}
 		},
-		onRelease: function() {
+		onHandleRelease: function() {
 			var newValue;
 			if (typeof this.dragData.offset === 'number') {
 				newValue = this.stepIndexToValue(this.dragData.stepIndex);
@@ -232,8 +283,8 @@
 			}
 
 			this.page.off({
-				'jcf-pointermove': this.onMove,
-				'jcf-pointerup': this.onRelease
+				'jcf-pointermove': this.onHandleMove,
+				'jcf-pointerup': this.onHandleRelease
 			});
 			delete this.activeDragHandle;
 			delete this.dragData;
