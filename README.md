@@ -249,6 +249,12 @@ Each module has options. Some of options are common between modules and some are
 			<td><code>horizontal</code></td>
 		</tr>
 		<tr>
+			<td><code>range</code></td>
+			<td>Show range indicator. By default indicator will be shown only for inputs with multiple handles. Possible values are: <code>"min"</code>, <code>"max"</code>, <code>"all"</code></td>
+			<td>string</td>
+			<td><code>"auto"</code></td>
+		</tr>
+		<tr>
 			<td><code>dragHandleCenter</code></td>
 			<td>Enable this option to make the cursor stick to the center of the input handle</td>
 			<td>boolean</td>

@@ -16,12 +16,14 @@
 			realElementClass: 'jcf-real-element',
 			fakeStructure: '<span class="jcf-range"><span class="jcf-range-wrapper"><span class="jcf-range-track"><span class="jcf-range-handle"></span></span></span></span>',
 			dataListMark: '<span class="jcf-range-mark"></span>',
-			dragValueDisplay: '<span class="jcf-drag-value"></span>',
+			rangeDisplayWrapper: '<span class="jcf-range-display-wrapper"></span>',
+			rangeDisplay: '<span class="jcf-range-display"></span>',
 			handleSelector: '.jcf-range-handle',
 			trackSelector: '.jcf-range-track',
 			activeHandleClass: 'jcf-active-handle',
 			verticalClass: 'jcf-vertical',
 			orientation: 'horizontal',
+			range: false, // or "min", "max", "all"
 			dragHandleCenter: true,
 			snapToMarks: true,
 			snapRadius: 5
@@ -46,10 +48,27 @@
 			this.values = this.realElement.prop('multiple') ? this.realElement.attr('value').split(',') : [this.realElement.val()];
 			this.handleCount = this.realElement.prop('multiple') ? this.values.length : 1;
 
+			// create range display
+			this.rangeDisplayWrapper = $(this.options.rangeDisplayWrapper).insertBefore(this.track);
+			if (this.options.range === 'min' || this.options.range === 'all') {
+				this.rangeMin = $(this.options.rangeDisplay).addClass('jcf-range-min').prependTo(this.rangeDisplayWrapper);
+			}
+			if (this.options.range === 'max' || this.options.range === 'all') {
+				this.rangeMax = $(this.options.rangeDisplay).addClass('jcf-range-max').prependTo(this.rangeDisplayWrapper);
+			}
+
 			// clone handles if needed
 			while (this.createdHandleCount < this.handleCount) {
 				this.createdHandleCount++;
 				this.handle.clone().addClass('jcf-index-' + this.createdHandleCount).insertBefore(this.handle);
+
+				// create mid ranges
+				if (this.createdHandleCount > 1) {
+					if (!this.rangeMid) {
+						this.rangeMid = $();
+					}
+					this.rangeMid = this.rangeMid.add($(this.options.rangeDisplay).addClass('jcf-range-mid').prependTo(this.rangeDisplayWrapper));
+				}
 			}
 
 			// grab all handles
@@ -63,6 +82,7 @@
 			this.directionProperty = this.isVertical ? 'top' : 'left';
 			this.offsetProperty = this.isVertical ? 'bottom' : 'left';
 			this.eventProperty = this.isVertical ? 'pageY' : 'pageX';
+			this.sizeProperty = this.isVertical ? 'height' : 'width';
 			this.sizeMethod = this.isVertical ? 'innerHeight' : 'innerWidth';
 			this.fakeElement.css('touchAction', this.isVertical ? 'pan-x' : 'pan-y');
 			if (this.isVertical) {
@@ -136,13 +156,19 @@
 			};
 		},
 		getNearestHandle: function(percent) {
+			// handle vertical sliders
+			if (this.isVertical) {
+				percent = 1 - percent;
+			}
+
 			// detect closest handle when track is pressed
 			var closestHandle = this.handles.eq(0),
-				closestDistance = Infinity;
+				closestDistance = Infinity,
+				self = this;
 
 			if (this.handleCount > 1) {
 				this.handles.each(function() {
-					var handleOffset = parseFloat(this.style.left) / 100,
+					var handleOffset = parseFloat(this.style[self.offsetProperty]) / 100,
 						handleDistance = Math.abs(handleOffset - percent);
 
 					if (handleDistance < closestDistance) {
@@ -160,7 +186,7 @@
 			if (!this.realElement.is(':disabled') && !this.activeDragHandle) {
 				trackSize = this.track[this.sizeMethod]();
 				trackOffset = this.track.offset()[this.directionProperty];
-				this.activeDragHandle = this.getNearestHandle((e.pageX - trackOffset) / this.trackHolder[this.sizeMethod]());
+				this.activeDragHandle = this.getNearestHandle((e[this.eventProperty] - trackOffset) / this.trackHolder[this.sizeMethod]());
 				this.activeDragHandleIndex = this.handles.index(this.activeDragHandle);
 				this.handles.removeClass(this.options.activeHandleClass).eq(this.activeDragHandleIndex).addClass(this.options.activeHandleClass);
 				innerOffset = this.activeDragHandle[this.sizeMethod]() / 2;
@@ -342,6 +368,33 @@
 			} else {
 				this.realElement.val(value);
 			}
+
+			this.updateRanges();
+		},
+		updateRanges: function() {
+			// update display ranges
+			var self = this,
+				handle;
+
+			if (this.rangeMin) {
+				handle = this.handles[0];
+				this.rangeMin.css(this.offsetProperty, 0).css(this.sizeProperty, handle.style[this.offsetProperty]);
+			}
+			if (this.rangeMax) {
+				handle = this.handles[this.handles.length - 1];
+				this.rangeMax.css(this.offsetProperty, handle.style[this.offsetProperty]).css(this.sizeProperty, 100 - parseFloat(handle.style[this.offsetProperty]) + '%');
+			}
+			if (this.rangeMid) {
+				this.handles.each(function(index, curHandle) {
+					var prevHandle, midBox;
+					if (index > 0) {
+						prevHandle = self.handles[index - 1];
+						midBox = self.rangeMid[index - 1];
+						midBox.style[self.offsetProperty] = prevHandle.style[self.offsetProperty];
+						midBox.style[self.sizeProperty] = parseFloat(curHandle.style[self.offsetProperty]) - parseFloat(prevHandle.style[self.offsetProperty]) + '%';
+					}
+				});
+			}
 		},
 		step: function(changeValue) {
 			var originalValue = parseFloat(this.values[this.activeDragHandleIndex || 0]),
@@ -410,6 +463,7 @@
 
 			// refresh handle position according to current value
 			this.setSliderValue(this.getSliderValue());
+			this.updateRanges();
 		},
 		destroy: function() {
 			this.realElement.removeClass(this.options.hiddenClass).insertBefore(this.fakeElement);

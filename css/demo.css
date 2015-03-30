@@ -88,6 +88,9 @@ section:after {
 	clear: both;
 	content: '';
 }
+.col .row label {
+	display: block;
+}
 .row label {
 	display: inline-block;
 	vertical-align: top;

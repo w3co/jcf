@@ -72,7 +72,7 @@
 		<div class="col">
 			<div class="row">
 				<label>Vertical slider:</label>
-				<input type="range" value="0" min="0" max="100" list="testdata1" data-jcf='{"orientation": "vertical"}'>
+				<input type="range" value="30" min="0" max="100" list="testdata1" data-jcf='{"orientation": "vertical", "range": "min"}'>
 			</div>
 			<datalist id="testdata1">
 				<option>0</option>
@@ -84,6 +84,12 @@
 				<option>90</option>
 				<option>100</option>
 			</datalist>
+		</div>
+		<div class="col">
+			<div class="row">
+				<label>Vertical range slider:</label>
+				<input type="range" multiple value="15,90" min="0" max="100" list="testdata1" data-jcf='{"orientation": "vertical"}'>
+			</div>
 		</div>
 	</section>
 

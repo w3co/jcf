@@ -486,6 +486,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	height: 10px;
 }
 .jcf-range .jcf-range-wrapper {
+	position: relative;
 	background: #e5e5e5;
 	border-radius: 5px;
 	display: block;
@@ -509,6 +510,43 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	left: -5px;
 	top: auto;
 }
+.jcf-range .jcf-range-display-wrapper {
+	position: absolute;
+	min-height: 10px;
+	min-width: 10px;
+	left: 10px;
+	right: 10px;
+}
+.jcf-range .jcf-range-display {
+	border-radius: 5px;
+	position: absolute;
+	background: #888;
+	width: 10px;
+	height: 10px;
+}
+.jcf-range .jcf-range-display.jcf-range-min {
+	margin: 0 0 0 -10px;
+	padding: 0 0 0 10px;
+}
+.jcf-range .jcf-range-display.jcf-range-max {
+	margin: 0 -10px 0 0;
+	padding: 0 10px 0 0;
+}
+.jcf-range.jcf-vertical .jcf-range-display-wrapper {
+	left: auto;
+	right: auto;
+	top: 10px;
+	bottom: 10px;
+}
+.jcf-range.jcf-vertical .jcf-range-display.jcf-range-min {
+	margin: 0 0 -10px;
+	padding: 0 0 10px;
+}
+.jcf-range.jcf-vertical .jcf-range-display.jcf-range-max {
+	margin: -10px 0 0;
+	padding: 10px 0 0;
+}
+
 .jcf-range .jcf-range-handle {
 	position: absolute;
 	background: #aaa;
