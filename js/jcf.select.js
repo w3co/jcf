@@ -632,18 +632,19 @@
 				this.onSelectItem(e);
 			}
 		},
-		onItemRelease: function() {
+		onItemRelease: function(e) {
 			// remove event handlers and temporary data
 			this.listHolder.off('jcf-pointerup', this.indexSelector, this.onItemRelease);
 
 			// simulate item selection
 			if (this.tmpListOffsetTop === this.list.offset().top) {
-				this.listHolder.on('click', this.indexSelector, this.onSelectItem);
+				this.listHolder.on('click', this.indexSelector, { savedPointerType: e.pointerType }, this.onSelectItem);
 			}
 			delete this.tmpListOffsetTop;
 		},
 		onSelectItem: function(e) {
 			var clickedIndex = parseFloat(e.currentTarget.getAttribute(this.options.indexAttribute)),
+				pointerType = e.data && e.data.savedPointerType || e.pointerType || 'mouse',
 				range;
 
 			// remove click event handler
@@ -655,7 +656,7 @@
 			}
 
 			if (this.element.prop('multiple')) {
-				if (e.metaKey || e.ctrlKey || e.pointerType === 'touch' || this.options.multipleSelectWithoutKey) {
+				if (e.metaKey || e.ctrlKey || pointerType === 'touch' || this.options.multipleSelectWithoutKey) {
 					// if CTRL/CMD pressed or touch devices - toggle selected option
 					this.realOptions[clickedIndex].selected = !this.realOptions[clickedIndex].selected;
 				} else if (e.shiftKey) {
@@ -683,7 +684,7 @@
 			this.refreshSelectedClass();
 
 			// scroll to active item in desktop browsers
-			if (e.pointerType === 'mouse') {
+			if (pointerType === 'mouse') {
 				this.scrollToActiveOption();
 			}
 
@@ -902,9 +903,6 @@
 			if (scrollInstance) {
 				scrollInstance.refresh();
 			}
-
-			// scroll active option into view
-			this.scrollToActiveOption();
 
 			// refresh selectes classes
 			this.refreshSelectedClass();

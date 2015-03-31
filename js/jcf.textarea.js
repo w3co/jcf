@@ -60,6 +60,7 @@
 			var resizerOffset = this.resizer.offset(),
 				areaOffset = this.fakeElement.offset();
 
+			e.preventDefault();
 			this.dragData = {
 				areaOffset: areaOffset,
 				innerOffsetLeft: e.pageX - resizerOffset.left,
