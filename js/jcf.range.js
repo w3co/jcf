@@ -45,8 +45,9 @@
 			this.handle = this.fakeElement.find(this.options.handleSelector);
 			this.createdHandleCount = 0;
 			this.activeDragHandleIndex = 0;
-			this.values = this.realElement.prop('multiple') ? this.realElement.attr('value').split(',') : [this.realElement.val()];
-			this.handleCount = this.realElement.prop('multiple') ? this.values.length : 1;
+			this.isMultiple = this.realElement.prop('multiple') || typeof this.realElement.attr('multiple') === 'string';
+			this.values = this.isMultiple ? this.realElement.attr('value').split(',') : [this.realElement.val()];
+			this.handleCount = this.isMultiple ? this.values.length : 1;
 
 			// create range display
 			this.rangeDisplayWrapper = $(this.options.rangeDisplayWrapper).insertBefore(this.track);
