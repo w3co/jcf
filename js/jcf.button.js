@@ -1,10 +1,10 @@
 /*!
  * JavaScript Custom Forms : Button Module
  *
- * Copyright 2014 PSD2HTML (http://psd2html.com)
+ * Copyright 2014 PSD2HTML - http://psd2html.com/jcf
  * Released under the MIT license (LICENSE.txt)
  *
- * Version: 1.0.3
+ * Version: 1.1.0
  */
 ;(function($) {
 	'use strict';

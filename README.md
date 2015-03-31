@@ -362,4 +362,4 @@ Apply custom scrollbar on `<textarea>` (Works only when `Scrollable` module is a
 
 This script is licensed under the [MIT License](LICENSE.txt).
 
-Copyright 2014-2015 [PSD2HTML.com](http://psd2html.com/jcf)
+Copyright 2014-2015 [PSD2HTML.com](http://psd2html.com/?jcf)
