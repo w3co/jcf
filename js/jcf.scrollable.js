@@ -394,8 +394,8 @@
 			btnIncSelector: '.jcf-scrollbar-inc',
 			sliderSelector: '.jcf-scrollbar-slider',
 			handleSelector: '.jcf-scrollbar-handle',
-			scrollInterval: 10,
-			scrollStep: 5
+			scrollInterval: 300,
+			scrollStep: 400 // px/sec
 		}, options);
 		this.init();
 	}
@@ -445,13 +445,14 @@
 		attachEvents: function() {
 			this.bindHandlers();
 			this.handle.on('jcf-pointerdown', this.onHandlePress);
-			this.btnDec.add(this.btnInc).on('jcf-pointerdown', this.onButtonPress);
+			this.slider.add(this.btnDec).add(this.btnInc).on('jcf-pointerdown', this.onButtonPress);
 		},
 		onHandlePress: function(e) {
 			if (e.pointerType === 'mouse' && e.button > 1) {
 				return;
 			} else {
 				e.preventDefault();
+				this.handleDragActive = true;
 				this.sliderOffset = this.slider.offset()[this.offsetProperty];
 				this.innerHandleOffset = e[this.offsetEventProperty] - this.handle.offset()[this.offsetProperty];
 
@@ -466,39 +467,113 @@
 			this.triggerScrollEvent(this.value);
 		},
 		onHandleRelease: function() {
+			this.handleDragActive = false;
 			this.doc.off('jcf-pointermove', this.onHandleDrag);
 			this.doc.off('jcf-pointerup', this.onHandleRelease);
 		},
 		onButtonPress: function(e) {
-			var direction;
+			var direction, clickOffset;
 			if (e.pointerType === 'mouse' && e.button > 1) {
 				return;
 			} else {
 				e.preventDefault();
-				direction = this.btnDec.is(e.currentTarget) ? -1 : 1;
-				this.startButtonScrolling(direction);
-				this.doc.on('jcf-pointerup', this.onButtonRelease);
+				if (!this.handleDragActive) {
+					if (this.slider.is(e.currentTarget)) {
+						// slider pressed
+						direction = this.handle.offset()[this.offsetProperty] > e[this.offsetEventProperty] ? -1 : 1;
+						clickOffset = e[this.offsetEventProperty] - this.slider.offset()[this.offsetProperty];
+						this.startPageScrolling(direction, clickOffset);
+					} else {
+						// scrollbar buttons pressed
+						direction = this.btnDec.is(e.currentTarget) ? -1 : 1;
+						this.startSmoothScrolling(direction);
+					}
+					this.doc.on('jcf-pointerup', this.onButtonRelease);
+				}
 			}
 		},
 		onButtonRelease: function() {
-			this.stopButtonScrolling();
+			this.stopPageScrolling();
+			this.stopSmoothScrolling();
 			this.doc.off('jcf-pointerup', this.onButtonRelease);
 		},
-		startButtonScrolling: function(direction) {
-			var self = this;
-			this.stopButtonScrolling();
-			this.scrollTimer = setInterval(function() {
+		startPageScrolling: function(direction, clickOffset) {
+			var self = this,
+				stepValue = direction * self.currentSize;
+
+			// limit checker
+			var isFinishedScrolling = function() {
+				var handleTop = (self.value / self.maxValue) * (self.currentSliderSize - self.handleSize);
+
 				if (direction > 0) {
-					self.value += self.options.scrollStep;
+					return handleTop + self.handleSize >= clickOffset;
 				} else {
-					self.value -= self.options.scrollStep;
+					return handleTop <= clickOffset;
 				}
+			};
+
+			// scroll by page when track is pressed
+			var doPageScroll = function() {
+				self.value += stepValue;
 				self.setValue(self.value);
 				self.triggerScrollEvent(self.value);
-			}, this.options.scrollInterval);
+
+				if (isFinishedScrolling()) {
+					clearInterval(self.pageScrollTimer);
+				}
+			};
+
+			// start scrolling
+			this.pageScrollTimer = setInterval(doPageScroll, this.options.scrollInterval);
+			doPageScroll();
 		},
-		stopButtonScrolling: function() {
-			clearInterval(this.scrollTimer);
+		stopPageScrolling: function() {
+			clearInterval(this.pageScrollTimer);
+		},
+		startSmoothScrolling: function(direction) {
+			var self = this, dt;
+			this.stopSmoothScrolling();
+
+			// simple animation functions
+			var raf = window.requestAnimationFrame || function(func) {
+				setTimeout(func, 16);
+			};
+			var getTimestamp = function() {
+				return Date.now ? Date.now() : new Date().getTime();
+			};
+
+			// set animation limit
+			var isFinishedScrolling = function() {
+				if (direction > 0) {
+					return self.value >= self.maxValue;
+				} else {
+					return self.value <= 0;
+				}
+			};
+
+			// animation step
+			var doScrollAnimation = function() {
+				var stepValue = (getTimestamp() - dt) / 1000 * self.options.scrollStep;
+
+				if (self.smoothScrollActive) {
+					self.value += stepValue * direction;
+					self.setValue(self.value);
+					self.triggerScrollEvent(self.value);
+
+					if (!isFinishedScrolling()) {
+						dt = getTimestamp();
+						raf(doScrollAnimation);
+					}
+				}
+			};
+
+			// start animation
+			self.smoothScrollActive = true;
+			dt = getTimestamp();
+			raf(doScrollAnimation);
+		},
+		stopSmoothScrolling: function() {
+			this.smoothScrollActive = false;
 		},
 		triggerScrollEvent: function(scrollValue) {
 			if (this.options.onScroll) {
@@ -578,7 +653,8 @@
 			this.doc.off('jcf-pointermove', this.onHandleDrag);
 			this.doc.off('jcf-pointerup', this.onHandleRelease);
 			this.doc.off('jcf-pointerup', this.onButtonRelease);
-			clearInterval(this.scrollTimer);
+			this.stopSmoothScrolling();
+			this.stopPageScrolling();
 			this.scrollbar.remove();
 		}
 	});
