@@ -88,7 +88,7 @@ section:after {
 	clear: both;
 	content: '';
 }
-.col .row label {
+.demo-range .col .row label {
 	display: block;
 }
 .row label {
