@@ -1,10 +1,10 @@
 /*!
  * JavaScript Custom Forms
  *
- * Copyright 2014 PSD2HTML - http://psd2html.com/jcf
+ * Copyright 2014-2015 PSD2HTML - http://psd2html.com/jcf
  * Released under the MIT license (LICENSE.txt)
  *
- * Version: 1.1.0
+ * Version: 1.1.1
  */
 ;(function(root, factory) {
 	'use strict';
@@ -17,6 +17,9 @@
 	}
 }(this, function($) {
 	'use strict';
+
+	// define version
+	var version = '1.1.1';
 
 	// private variables
 	var customInstances = [];
@@ -263,6 +266,7 @@
 
 	// public API
 	var api = {
+		version: version,
 		modules: {},
 		getOptions: function() {
 			return $.extend({}, commonOptions);
