@@ -35,6 +35,25 @@ $(function() {
 });
 ```
 
+## How to use JCF with AngularJS 1.x
+
+To use this script with Angular you still need to attach all scripts above (including jQuery) and also attach directive:
+
+```js
+<script src="js/jcf.angular.js"></script>
+```
+
+When the directive is connected as dependency in your app you can add `jcf` attribute to the form field and such element will be customized:
+```html
+<!-- customize select: -->
+<select jcf>
+    ...
+</select>
+
+<!-- customize range input with specific options: -->
+<input type="range" jcf='{"orientation": "vertical"}'>
+```
+
 ## General API Information
 
 Global `jcf` object has several methods to control custom form elements on the page:

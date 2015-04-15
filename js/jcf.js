@@ -286,17 +286,35 @@
 			// add module to list
 			var Module = function(options) {
 				// save instance to collection
-				options.element.data(commonOptions.dataKey, this);
+				if (!options.element.data(commonOptions.dataKey)) {
+					options.element.data(commonOptions.dataKey, this);
+				}
 				customInstances.push(this);
 
 				// save options
-				this.options = $.extend({}, commonOptions, this.options, options.element.data(commonOptions.optionsKey), options);
+				this.options = $.extend({}, commonOptions, this.options, getInlineOptions(options.element), options);
 
 				// bind event handlers to instance
 				this.bindHandlers();
 
 				// call constructor
 				this.init.apply(this, arguments);
+			};
+
+			// parse options from HTML attribute
+			var getInlineOptions = function(element) {
+				var dataOptions = element.data(commonOptions.optionsKey),
+					attrOptions = element.attr(commonOptions.optionsKey);
+
+				if (dataOptions) {
+					return dataOptions;
+				} else if (attrOptions) {
+					try {
+						return $.parseJSON(attrOptions);
+					} catch (e) {
+						// ignore invalid attributes
+					}
+				}
 			};
 
 			// set proto as prototype for new module

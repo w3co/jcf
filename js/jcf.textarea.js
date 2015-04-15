@@ -70,6 +70,12 @@
 				'jcf-pointermove': this.onResizeMove,
 				'jcf-pointerup': this.onResizeRelease
 			});
+
+			// restore focus
+			if (this.isFocused) {
+				this.focusedDrag = true;
+				this.realElement.focus();
+			}
 		},
 		onResizeMove: function(e) {
 			var newWidth = e.pageX + this.dragData.innerOffsetLeft - this.dragData.areaOffset.left,
@@ -81,13 +87,20 @@
 
 			// resize textarea and refresh scrollbars
 			this.realElement.innerWidth(newWidth - widthDiff).innerHeight(newHeight);
-			this.refreshCustomScrollbars();
+			this.scrollable.rebuildScrollbars();
+
+			// restore focus
+			if (this.focusedDrag) {
+				this.realElement.focus();
+			}
 		},
 		onResizeRelease: function() {
 			this.doc.off({
 				'jcf-pointermove': this.onResizeMove,
 				'jcf-pointerup': this.onResizeRelease
 			});
+
+			delete this.focusedDrag;
 		},
 		onFocus: function() {
 			this.isFocused = true;
@@ -103,17 +116,17 @@
 			this.refreshCustomScrollbars();
 		},
 		refreshCustomScrollbars: function() {
-			// refresh custom scrollbars
 			if (this.isFocused) {
 				this.scrollable.redrawScrollbars();
 			} else {
-				this.scrollable.refresh();
+				this.scrollable.rebuildScrollbars();
 			}
 		},
 		refresh: function() {
 			// refresh custom scroll position
 			var isDisabled = this.realElement.is(':disabled');
 			this.fakeElement.toggleClass(this.options.disabledClass, isDisabled);
+			this.refreshCustomScrollbars();
 		},
 		destroy: function() {
 			// destroy custom scrollbar

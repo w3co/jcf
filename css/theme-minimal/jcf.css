@@ -344,6 +344,7 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	display: block;
 	padding: 5px 9px;
 	color: #656565;
+	min-height: 14px;
 	height: 1%;
 }
 .jcf-list .jcf-disabled {

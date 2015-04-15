@@ -444,9 +444,15 @@
 			return percent * 100;
 		},
 		getSliderValue: function() {
-			var result = [];
+			var result = [],
+				self = this;
+
 			$.each(this.values, function(index, value) {
-				result.push(parseFloat(value) || 0);
+				if (index > 0) {
+					result.push(parseFloat(value) || 0);
+				} else {
+					result.push(parseFloat(self.realElement.val()) || 0);
+				}
 			});
 			return result;
 		},
