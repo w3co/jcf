@@ -443,5 +443,8 @@
 		}
 	};
 
+	// always export API to the global window object
+	window.jcf = api;
+
 	return api;
 }));
