@@ -28,5 +28,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
 }
