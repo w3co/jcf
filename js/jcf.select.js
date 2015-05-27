@@ -388,7 +388,8 @@
 				selectedOption = this.realElement.prop('options')[selectedIndex],
 				selectedOptionImage = selectedOption ? selectedOption.getAttribute('data-image') : null,
 				selectedOptionText = '',
-				selectedOptionClasses;
+				selectedOptionClasses,
+				self = this;
 
 			if (this.realElement.prop('multiple')) {
 				$.each(this.realElement.prop('options'), function(index, option) {
@@ -396,6 +397,9 @@
 						selectedOptionText += (selectedOptionText ? ', ' : '') + option.innerHTML;
 					}
 				});
+				if (!selectedOptionText) {
+					selectedOptionText = self.realElement.attr('placeholder') || '';
+				}
 				this.selectText.removeAttr('class').html(selectedOptionText);
 			} else if (!selectedOption) {
 				if (this.selectImage) {
