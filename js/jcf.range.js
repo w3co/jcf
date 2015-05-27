@@ -444,17 +444,9 @@
 			return percent * 100;
 		},
 		getSliderValue: function() {
-			var result = [],
-				self = this;
-
-			$.each(this.values, function(index, value) {
-				if (index > 0) {
-					result.push(parseFloat(value) || 0);
-				} else {
-					result.push(parseFloat(self.realElement.val()) || 0);
-				}
+			return $.map(this.values, function(value) {
+				return parseFloat(value) || 0;
 			});
-			return result;
 		},
 		setSliderValue: function(values) {
 			// set handle position accordion according to value
