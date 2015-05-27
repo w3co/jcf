@@ -128,6 +128,7 @@
 					self.refresh();
 					if (self.list) {
 						self.list.refresh();
+						self.list.scrollToActiveOption();
 					}
 				}, 1);
 			};
@@ -503,6 +504,7 @@
 					clearTimeout(self.refreshTimer);
 					self.refreshTimer = setTimeout(function() {
 						self.refresh();
+						self.list.scrollToActiveOption();
 					}, 1);
 				}
 			};
@@ -768,7 +770,9 @@
 		scrollToActiveOption: function() {
 			// scroll to target option
 			var targetOffset = this.getActiveOptionOffset();
-			this.listHolder.prop('scrollTop', targetOffset);
+			if (typeof targetOffset === 'number') {
+				this.listHolder.prop('scrollTop', targetOffset);
+			}
 		},
 		getSelectedIndexRange: function() {
 			var firstSelected = -1, lastSelected = -1;

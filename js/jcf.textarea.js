@@ -87,7 +87,10 @@
 
 			// resize textarea and refresh scrollbars
 			this.realElement.innerWidth(newWidth - widthDiff).innerHeight(newHeight);
-			this.scrollable.rebuildScrollbars();
+
+			if (this.scrollable) {
+				this.scrollable.rebuildScrollbars();
+			}
 
 			// restore focus
 			if (this.focusedDrag) {
@@ -116,10 +119,12 @@
 			this.refreshCustomScrollbars();
 		},
 		refreshCustomScrollbars: function() {
-			if (this.isFocused) {
-				this.scrollable.redrawScrollbars();
-			} else {
-				this.scrollable.rebuildScrollbars();
+			if (this.scrollable) {
+				if (this.isFocused) {
+					this.scrollable.redrawScrollbars();
+				} else {
+					this.scrollable.rebuildScrollbars();
+				}
 			}
 		},
 		refresh: function() {

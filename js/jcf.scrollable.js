@@ -318,7 +318,7 @@
 			// redraw vertical scrollbar
 			if (this.verticalScrollActive) {
 				viewSize = this.vBarEdge ? this.containerDimensions.height - this.vBarEdge : this.embeddedDimensions.innerHeight;
-				maxScrollValue = this.realElement.prop('scrollHeight') - this.vBarEdge;
+				maxScrollValue = Math.max(this.realElement.prop('offsetHeight'), this.realElement.prop('scrollHeight')) - this.vBarEdge;
 
 				this.vBar.show().setMaxValue(maxScrollValue - viewSize).setRatio(viewSize / maxScrollValue).setSize(viewSize);
 				this.vBar.setValue(this.realElement.scrollTop());
