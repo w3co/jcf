@@ -16,6 +16,14 @@ The script was tested in the following browsers:
  - Android 4+
  - iOS7+
 
+## Installation
+
+Install using [npm](http://npmjs.org/):
+`npm install jcf`
+
+Install using [Bower](http://bower.io/):
+`bower install jcf`
+
 ## Usage
 The script requires [jQuery 1.7+](http://jquery.com/) to work properly. To add script in your page simply attach core file - `jcf.js` and some of modules you want to use for customization:</p>
 
