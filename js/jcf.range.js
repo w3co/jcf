@@ -26,7 +26,8 @@
 			range: false, // or "min", "max", "all"
 			dragHandleCenter: true,
 			snapToMarks: true,
-			snapRadius: 5
+			snapRadius: 5,
+			handleOverlapRatio: 0.5 // min value=0, max value=2
 		},
 		matchElement: function(element) {
 			return element.is(this.selector);
@@ -145,10 +146,10 @@
 				maxStep = Infinity;
 
 			if (handleIndex > 0) {
-				minStep = this.valueToStepIndex(this.values[handleIndex - 1]);
+				minStep = this.valueToStepIndex(handleIndex - 1);
 			}
 			if (handleIndex < this.handleCount - 1) {
-				maxStep = this.valueToStepIndex(this.values[handleIndex + 1]);
+				maxStep = this.valueToStepIndex(handleIndex + 1);
 			}
 
 			return {
@@ -431,8 +432,17 @@
 				this.setSliderValue(this.values);
 			}
 		},
-		valueToStepIndex: function(value) {
-			return (value - this.minValue) / this.stepValue;
+		valueToStepIndex: function(handleIndex) {
+			var value = this.values[handleIndex];
+			var offsetOverlap = 0;
+
+			if (this.options.handleOverlapRatio > 0) {
+				offsetOverlap = parseInt(this.handles.eq(0).css('width'), 10) * this.options.handleOverlapRatio;
+				if (handleIndex > 0) {
+					offsetOverlap *= -1;
+				}
+			}
+			return Math.round((value - this.minValue + offsetOverlap) / this.stepValue);
 		},
 		stepIndexToValue: function(stepIndex) {
 			return this.minValue + this.stepValue * stepIndex;
