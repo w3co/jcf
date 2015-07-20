@@ -66,7 +66,7 @@ When the directive is connected as dependency in your app you can add `jcf` attr
 
 Global `jcf` object has several methods to control custom form elements on the page:
 
-`jcf.replaceAll( [context] )` - Replace elements on the whole page. Optional argument is context to use (can be CSS selector, or DOM/jQuery object).
+`jcf.replaceAll( [context] )` - Replace elements on the whole page. Optional argument is context to use (can be CSS selector, or DOM/jQuery object). Add class `jcf-ignore` on the element to prevent its customization.
 
 `jcf.replace( elements [, moduleName] [, customOptions] )` - Replace certain element or multiple elements. Returns custom form element instance. The first argument is CSS selector, or DOM/jQuery object to be customized. Second argument is optional and used to specify module which should be used for customization. By default it is `false` which will result module to be auto detected. Third argument is module options which can be specified with object.
 
