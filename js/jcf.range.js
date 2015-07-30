@@ -26,7 +26,8 @@
 			range: false, // or "min", "max", "all"
 			dragHandleCenter: true,
 			snapToMarks: true,
-			snapRadius: 5
+			snapRadius: 5,
+			minRange: 0
 		},
 		matchElement: function(element) {
 			return element.is(this.selector);
@@ -145,10 +146,10 @@
 				maxStep = Infinity;
 
 			if (handleIndex > 0) {
-				minStep = this.valueToStepIndex(this.values[handleIndex - 1]);
+				minStep = this.valueToStepIndex(parseFloat(this.values[handleIndex - 1]) + this.options.minRange);
 			}
 			if (handleIndex < this.handleCount - 1) {
-				maxStep = this.valueToStepIndex(this.values[handleIndex + 1]);
+				maxStep = this.valueToStepIndex(parseFloat(this.values[handleIndex + 1]) - this.options.minRange);
 			}
 
 			return {
@@ -411,10 +412,10 @@
 
 			if (this.handleCount > 1) {
 				if (this.activeDragHandleIndex > 0) {
-					minValue = parseFloat(this.values[this.activeDragHandleIndex - 1]);
+					minValue = parseFloat(this.values[this.activeDragHandleIndex - 1]) + this.options.minRange;
 				}
 				if (this.activeDragHandleIndex < this.handleCount - 1) {
-					maxValue = parseFloat(this.values[this.activeDragHandleIndex + 1]);
+					maxValue = parseFloat(this.values[this.activeDragHandleIndex + 1]) - this.options.minRange;
 				}
 			}
 

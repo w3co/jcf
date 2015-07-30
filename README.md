@@ -282,6 +282,12 @@ Each module has options. Some of options are common between modules and some are
 			<td><code>"auto"</code></td>
 		</tr>
 		<tr>
+			<td><code>minRange</code></td>
+			<td>Works only when multiple slider handles are used. Sets the minimum range value that can be selected between the two handles</td>
+			<td>number</td>
+			<td><code>0</code></td>
+		</tr>
+		<tr>
 			<td><code>dragHandleCenter</code></td>
 			<td>Enable this option to make the cursor stick to the center of the input handle</td>
 			<td>boolean</td>
