@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($, window) {
+jcf.addModule(function($, window) {
 	'use strict';
 
-	jcf.addModule({
+	var module = {
 		name: 'Select',
 		selector: 'select',
 		options: {
@@ -54,7 +54,7 @@
 		destroy: function() {
 			this.instance.destroy();
 		}
-	});
+	};
 
 	// combobox module
 	function ComboBox(options) {
@@ -937,4 +937,5 @@
 		};
 	}());
 
-}(jQuery, this));
+	return module;
+});

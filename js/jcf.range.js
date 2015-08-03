@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'Range',
 		selector: 'input[type="range"]',
 		options: {
@@ -475,6 +475,5 @@
 				blur: this.onBlur
 			});
 		}
-	});
-
-}(jQuery));
+	};
+});

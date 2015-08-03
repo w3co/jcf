@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'File',
 		selector: 'input[type="file"]',
 		options: {
@@ -118,6 +118,5 @@
 			});
 			this.doc.off('jcf-pointerup', this.onRelease);
 		}
-	});
-
-}(jQuery));
+	};
+});

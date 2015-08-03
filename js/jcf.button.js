@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'Button',
 		selector: 'button, input[type="button"], input[type="submit"], input[type="reset"]',
 		options: {
@@ -80,6 +80,5 @@
 				opacity: ''
 			});
 		}
-	});
-
-}(jQuery));
+	};
+});

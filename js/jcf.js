@@ -283,6 +283,11 @@
 			}
 		},
 		addModule: function(proto) {
+			// proto is factory function
+			if ($.isFunction(proto)) {
+				proto = proto($, window);
+			}
+
 			// add module to list
 			var Module = function(options) {
 				// save instance to collection

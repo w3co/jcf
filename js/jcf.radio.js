@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'Radio',
 		selector: 'input[type="radio"]',
 		options: {
@@ -186,6 +186,5 @@
 				click: this.onRealClick
 			});
 		}
-	});
-
-}(jQuery));
+	};
+});

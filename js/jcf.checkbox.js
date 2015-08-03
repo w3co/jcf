@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'Checkbox',
 		selector: 'input[type="checkbox"]',
 		options: {
@@ -162,6 +162,5 @@
 				click: this.onRealClick
 			});
 		}
-	});
-
-}(jQuery));
+	};
+});

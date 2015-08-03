@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'Number',
 		selector: 'input[type="number"]',
 		options: {
@@ -151,6 +151,5 @@
 				blur: this.onBlur
 			});
 		}
-	});
-
-}(jQuery));
+	};
+});

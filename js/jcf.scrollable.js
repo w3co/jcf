@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($, window) {
+jcf.addModule(function($, window) {
 	'use strict';
 
-	jcf.addModule({
+	var module = {
 		name: 'Scrollable',
 		selector: '.jcf-scrollable',
 		plugins: {
@@ -379,7 +379,7 @@
 			this.scrollWrapper.remove();
 			this.restoreScrollOffsets();
 		}
-	});
+	};
 
 	// custom scrollbar
 	function ScrollBar(options) {
@@ -659,4 +659,5 @@
 		}
 	});
 
-}(jQuery, this));
+	return module;
+});

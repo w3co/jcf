@@ -6,10 +6,10 @@
  *
  * Version: 1.1.3
  */
-;(function($) {
+jcf.addModule(function($) {
 	'use strict';
 
-	jcf.addModule({
+	return {
 		name: 'Textarea',
 		selector: 'textarea',
 		options: {
@@ -149,6 +149,5 @@
 			// remove scrollbar and fake wrapper
 			this.fakeElement.remove();
 		}
-	});
-
-}(jQuery));
+	};
+});
