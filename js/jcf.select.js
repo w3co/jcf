@@ -501,8 +501,8 @@ jcf.addModule(function($, window) {
 			// delayed refresh handler
 			var self = this;
 			this.delayedRefresh = function(e) {
-				if (e && e.which === 16) {
-					// ignore SHIFT key
+				if (e && (e.which === 16 || e.ctrlKey || e.metaKey || e.altKey)) {
+					// ignore modifier keys
 					return;
 				} else {
 					clearTimeout(self.refreshTimer);
@@ -606,6 +606,11 @@ jcf.addModule(function($, window) {
 			this.listHolder = this.container.find(this.options.containerSelector);
 			this.lastClickedIndex = this.element.prop('selectedIndex');
 			this.rebuildList();
+
+			// save current selection in multiple select
+			if (this.element.prop('multiple')) {
+				this.previousSelection = this.getSelectedOptionsIndexes();
+			}
 		},
 		attachEvents: function() {
 			this.bindHandlers();
@@ -778,30 +783,33 @@ jcf.addModule(function($, window) {
 				this.listHolder.prop('scrollTop', targetOffset);
 			}
 		},
-		getSelectedIndexRange: function() {
-			var firstSelected = -1, lastSelected = -1;
+		getSelectedOptionsIndexes: function() {
+			var selection = [];
 			this.realOptions.each(function(index, option) {
 				if (option.selected) {
-					if (firstSelected < 0) {
-						firstSelected = index;
-					}
-					lastSelected = index;
+					selection.push(index);
 				}
 			});
-			return [firstSelected, lastSelected];
+			return selection;
 		},
 		getChangedSelectedIndex: function() {
 			var selectedIndex = this.element.prop('selectedIndex'),
-				targetIndex;
+				self = this,
+				found = false,
+				targetIndex = null;
 
 			if (this.element.prop('multiple')) {
 				// multiple selects handling
-				if (!this.previousRange) {
-					this.previousRange = [selectedIndex, selectedIndex];
-				}
-				this.currentRange = this.getSelectedIndexRange();
-				targetIndex = this.currentRange[this.currentRange[0] !== this.previousRange[0] ? 0 : 1];
-				this.previousRange = this.currentRange;
+				this.currentSelection = this.getSelectedOptionsIndexes();
+				$.each(this.currentSelection, function(index, optionIndex) {
+					if (!found && self.previousSelection.indexOf(optionIndex) < 0) {
+						if (index === 0) {
+							found = true;
+						}
+						targetIndex = optionIndex;
+					}
+				});
+				this.previousSelection = this.currentSelection;
 				return targetIndex;
 			} else {
 				// single choice selects handling
@@ -810,9 +818,16 @@ jcf.addModule(function($, window) {
 		},
 		getActiveOptionOffset: function() {
 			// calc values
+			var currentIndex = this.getChangedSelectedIndex();
+
+			// selection was not changed
+			if (currentIndex === null) {
+				return;
+			}
+
+			// find option and scroll to it if needed
 			var dropHeight = this.listHolder.height(),
 				dropScrollTop = this.listHolder.prop('scrollTop'),
-				currentIndex = this.getChangedSelectedIndex(),
 				fakeOption = this.fakeOptions.eq(currentIndex),
 				fakeOptionOffset = fakeOption.offset().top - this.list.offset().top,
 				fakeOptionHeight = fakeOption.innerHeight();
