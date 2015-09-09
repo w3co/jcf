@@ -139,7 +139,7 @@ jcf.addModule(function($, window) {
 					focus: this.onFocus,
 					change: this.onChange,
 					click: this.onChange,
-					keydown: this.onChange
+					keydown: this.delayedRefresh
 				});
 			} else {
 				// custom dropdown event handlers
