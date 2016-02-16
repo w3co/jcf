@@ -8,10 +8,12 @@
  */
 ;(function(root, factory) {
 	'use strict';
-	if (typeof define === 'function' && define.amd) {
+
+	if (typeof exports === 'object') {
+		factory(require('jquery'));
+		module.exports = require('./modules-resolver');
+	} else if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
-	} else if (typeof exports === 'object') {
-		module.exports = factory(require('jquery'));
 	} else {
 		root.jcf = factory(jQuery);
 	}
