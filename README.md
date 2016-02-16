@@ -62,6 +62,55 @@ When the directive is connected as dependency in your app you can add `jcf` attr
 <input type="range" jcf='{"orientation": "vertical"}'>
 ```
 
+## How to use JCF with webpack
+
+To use JCF with webpack you can do the following:
+```js
+// get jcf resolver
+var jcfResolver = require('jcf');
+
+// init modules you need
+jcfResolver.angular();
+jcfResolver.checkbox();
+jcfResolver.range();
+jcfResolver.select();
+
+// start replacement with DOM ready event
+$(function() {
+	jcf.replaceAll();
+});
+```
+
+Or:
+```js
+var jcfResolver = require('jcf');
+
+// init just radio and checkbox
+jcfResolver.initAll(['radio', 'checkbox']);
+```
+
+But if you need all submodules to be inited, you can just:
+```js
+var jcfResolver = require('jcf');
+
+jcfResolver.initAll();
+
+// the following still needs to be called manually
+jcfResolver.angular();
+
+// start replacement with DOM ready event
+$(function() {
+	jcf.replaceAll();
+});
+```
+
+All methods of `jcfResolver` return jcfResolver instance, so you can make a chaining
+```js
+jcfResolver.radio().checkbox().select().range().scrollable().textarea();
+```
+
+But you should understand that jcfResolver way will add all submodules to bundle anyway. Init is on you, but js code of all submodules will be in the bundle no matter if you're using 100% of it or not ([you can read more about it](https://webpack.github.io/docs/context.html))
+
 ## General API Information
 
 Global `jcf` object has several methods to control custom form elements on the page:
