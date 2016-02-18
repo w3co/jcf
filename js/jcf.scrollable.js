@@ -6,6 +6,9 @@
  *
  * Version: 1.2.0
  */
+
+(function(jcf) {
+
 jcf.addModule(function($, window) {
 	'use strict';
 
@@ -661,3 +664,5 @@ jcf.addModule(function($, window) {
 
 	return module;
 });
+
+}(jcf));

@@ -1,6 +1,9 @@
 /*
  * JCF directive for basic AngularJS 1.x integration
  */
+
+(function(jcf) {
+
 angular.module('jcf', []).directive('jcf', function() {
 	return {
 		restrict: 'A',
@@ -17,3 +20,5 @@ angular.module('jcf', []).directive('jcf', function() {
 		}
 	}
 });
+
+}(jcf));
