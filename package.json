@@ -18,5 +18,6 @@
   "bugs": {
     "url": "https://github.com/w3co/jcf/issues"
   },
-  "homepage": "http://psd2html.com/jcf"
+  "homepage": "http://psd2html.com/jcf",
+  "main": "./js/jcf.common.js"
 }

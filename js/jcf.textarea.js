@@ -6,6 +6,9 @@
  *
  * Version: 1.2.0
  */
+
+(function(jcf) {
+
 jcf.addModule(function($) {
 	'use strict';
 
@@ -151,3 +154,5 @@ jcf.addModule(function($) {
 		}
 	};
 });
+
+}(jcf));
