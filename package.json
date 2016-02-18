@@ -1,6 +1,7 @@
 {
   "name": "jcf",
   "version": "1.2.0",
+  "main": "./js/jcf.js",
   "description": "This script allows smooth cross-browser customization of form elements with CSS",
   "repository": {
     "type": "git",
