@@ -4,7 +4,7 @@
  * Copyright 2014-2015 PSD2HTML - http://psd2html.com/jcf
  * Released under the MIT license (LICENSE.txt)
  *
- * Version: 1.2.0
+ * Version: 1.2.1
  */
 ;(function(root, factory) {
 	'use strict';
@@ -19,7 +19,7 @@
 	'use strict';
 
 	// define version
-	var version = '1.2.0';
+	var version = '1.2.1';
 
 	// private variables
 	var customInstances = [];
