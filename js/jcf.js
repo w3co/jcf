@@ -448,5 +448,10 @@
 		}
 	};
 
+	// we need to make JCF available globally if we're in AMD environment
+	if (typeof define === 'function' && define.amd) {
+		window.jcf = api;
+	}
+
 	return api;
 }));
