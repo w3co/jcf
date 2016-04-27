@@ -306,7 +306,8 @@ jcf.addModule(function($, window) {
 		},
 		repositionDropdown: function() {
 			var selectOffset = this.fakeElement.offset(),
-				selectWidth = this.fakeElement.outerWidth(),
+				fakeElementBounds = this.fakeElement[0].getBoundingClientRect(),
+				selectWidth = fakeElementBounds.width || fakeElementBounds.right - fakeElementBounds.left,
 				selectHeight = this.fakeElement.outerHeight(),
 				dropHeight = this.dropdown.css('width', selectWidth).outerHeight(),
 				winScrollTop = this.win.scrollTop(),
