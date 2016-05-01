@@ -4,7 +4,7 @@
  * Copyright 2014-2015 PSD2HTML - http://psd2html.com/jcf
  * Released under the MIT license (LICENSE.txt)
  *
- * Version: 1.2.1
+ * Version: 1.2.2
  */
 
 (function(jcf) {
