@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/w3co/jcf.git"
   },
+  "scripts": {
+    "build": "gulp build"
+  },
   "keywords": [
     "jQuery",
     "JCF",
@@ -19,5 +22,11 @@
     "url": "https://github.com/w3co/jcf/issues"
   },
   "homepage": "http://psd2html.com/jcf",
-  "main": "./js/jcf.common.js"
+  "main": "./js/jcf.common.js",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-csso": "^2.0.0",
+    "gulp-uglify": "^1.5.3"
+  }
 }
