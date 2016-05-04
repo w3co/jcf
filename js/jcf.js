@@ -49,6 +49,7 @@
 
 		// crossbrowser style handling
 		var addCSSRule = function(selector, rules, index) {
+			index = index || 0;
 			if (styleSheet.insertRule) {
 				styleSheet.insertRule(selector + '{' + rules + '}', index);
 			} else {
