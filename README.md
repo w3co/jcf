@@ -24,6 +24,8 @@ Install using [npm](http://npmjs.org/):
 Install using [Bower](http://bower.io/):
 `bower install jcf`
 
+CDN: this library is available at [cdnjs](https://cdnjs.com/)
+
 ## Usage
 The script requires [jQuery 1.7+](http://jquery.com/) to work properly. To add script in your page simply attach core file - `jcf.js` and some of modules you want to use for customization:</p>
 
@@ -395,4 +397,4 @@ Apply custom scrollbar on `<textarea>` (Works only when `Scrollable` module is a
 
 This script is licensed under the [MIT License](LICENSE.txt).
 
-Copyright 2014-2015 [PSD2HTML.com](http://psd2html.com/?jcf)
+Copyright 2014-2016 [PSD2HTML.com](http://psd2html.com/?jcf)
