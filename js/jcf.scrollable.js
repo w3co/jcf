@@ -32,6 +32,12 @@ jcf.addModule(function($, window) {
 			this.initStructure();
 			this.attachEvents();
 			this.rebuildScrollbars();
+
+			// scrolling fix for iOS10
+			if (!module.scrollFixed) {
+				module.scrollFixed = true;
+				$(window).on('touchmove', $.noop);
+			}
 		},
 		initStructure: function() {
 			// prepare structure
