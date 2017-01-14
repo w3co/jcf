@@ -38,6 +38,11 @@ jcf.addModule(function($, window) {
 			if (this.instance) {
 				this.instance.destroy();
 			}
+
+			if (this.isListBox() && !this.options.multipleCompactStyle && this.options.isMobileDevice && this.options.wrapNativeOnMobile) {
+				this.options.multipleCompactStyle = true;
+			}
+
 			if (this.isListBox() && !this.options.multipleCompactStyle) {
 				this.instance = new ListBox(this.options);
 			} else {
