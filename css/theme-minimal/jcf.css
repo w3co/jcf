@@ -414,12 +414,15 @@ body > .jcf-select-drop.jcf-drop-flipped {
 	position: relative;
 	height: 32px;
 }
-.jcf-number input {-moz-appearance: textfield;}
 .jcf-number input::-webkit-inner-spin-button,
 .jcf-number input::-webkit-outer-spin-button {-webkit-appearance: none;}
 .jcf-number input {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	-webkit-appearance: none;
+	-moz-appearance: textfield;
+	appearance: none;
+	border-radius: 0;
 	box-sizing: border-box;
 	border: 1px solid #777;
 	padding: 3px 27px 3px 7px;
