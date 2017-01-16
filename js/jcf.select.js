@@ -43,6 +43,11 @@ jcf.addModule(function($, window) {
 				this.options.multipleCompactStyle = true;
 			}
 
+			// workaround for iOS issue with multiple selects and autoselection of first option 
+			if (this.options.isMobileDevice && this.options.multipleCompactStyle && this.options.wrapNativeOnMobile && !this.element.children('optgroup:first-child').length) {
+				$('<optgroup disabled hidden></optgroup>').prependTo(this.element);
+			}
+
 			if (this.isListBox() && !this.options.multipleCompactStyle) {
 				this.instance = new ListBox(this.options);
 			} else {
