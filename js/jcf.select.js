@@ -304,6 +304,7 @@ jcf.addModule(function($, window) {
 				alwaysPreventMouseWheel: true,
 				maxVisibleItems: this.options.maxVisibleItems,
 				useCustomScroll: this.options.useCustomScroll,
+				autoScrollSelect: this.options.autoScrollSelect,
 				holder: this.dropdown.find(this.options.dropContentSelector),
 				multipleSelectWithoutKey: this.realElement.prop('multiple'),
 				element: this.realElement
@@ -587,6 +588,7 @@ jcf.addModule(function($, window) {
 		this.options = $.extend({
 			holder: null,
 			maxVisibleItems: 10,
+			autoScrollSelect: true,
 			selectOnClick: true,
 			useHoverClass: false,
 			useCustomScroll: false,
@@ -791,6 +793,10 @@ jcf.addModule(function($, window) {
 			}
 		},
 		scrollToActiveOption: function() {
+			if(!this.options.autoScrollSelect){
+				return;
+			}
+
 			// scroll to target option
 			var targetOffset = this.getActiveOptionOffset();
 			if (typeof targetOffset === 'number') {

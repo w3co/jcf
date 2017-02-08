@@ -163,6 +163,12 @@ Each module has options. Some of options are common between modules and some are
 			<td>number</td>
 			<td><code>10</code></td>
 		</tr>
+		<tr>
+			<td><code>autoScrollSelect</code></td>
+			<td>Enable dynamic scrolling in multiple select dropdowns</td>
+			<td>boolean</td>
+			<td><code>true</code></td>
+		</tr>
 	</tbody>
 </table>
 
