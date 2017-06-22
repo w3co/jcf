@@ -106,6 +106,8 @@ jcf.addModule(function($) {
 				diff = Math.abs(edgeNumber - newValue) % this.stepValue;
 
 			// handle step diff
+			//For now do not manage edgeNumber
+			diff = 0;
 			if (diff) {
 				if (increment) {
 					newValue += addValue - diff;
@@ -113,7 +115,8 @@ jcf.addModule(function($) {
 					newValue -= diff;
 				}
 			} else {
-				newValue += addValue;
+				//newValue += addValue;
+				newValue = Math.addFloats(newValue, addValue);
 			}
 
 			// handle min/max limits
@@ -158,3 +161,25 @@ jcf.addModule(function($) {
 });
 
 }(jcf));
+
+
+Math.addFloats = function (f1, f2) {
+    //Helper function to find the number of decimal places
+    function findDec(dec) {
+        var count = 0;
+        while (dec % 1) {
+            dec *= 10;
+            count++;
+        }
+        return count;
+    }
+
+    //Determine the greatest number of decimal places
+    var dec1 = findDec(f1);
+    var dec2 = findDec(f2);
+    var fixed = dec1 > dec2 ? dec1 : dec2;
+
+    //do the math then do a toFixed, could do a toPrecision also
+    var n = (f1 + f2).toFixed(fixed);
+    return +n;
+}
