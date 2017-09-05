@@ -45,6 +45,8 @@ $(function() {
 });
 ```
 
+Please note that JCF does not replace original form elements with own components. It just creates additional DOM nodes to support CSS styling. All DOM events are invoked on original elements and in most cases JCF could be easily turned on or off without affecting your existing event listeners.
+
 ## How to use JCF with AngularJS 1.x
 
 To use this script with Angular you still need to attach all scripts above (including jQuery) and also attach directive:
