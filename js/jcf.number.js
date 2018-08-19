@@ -20,7 +20,7 @@ jcf.addModule(function($) {
 			fakeStructure: '<span class="jcf-number"><span class="jcf-btn-inc"></span><span class="jcf-btn-dec"></span></span>',
 			btnIncSelector: '.jcf-btn-inc',
 			btnDecSelector: '.jcf-btn-dec',
-			pressInterval: 150
+			pressInterval: 300
 		},
 		matchElement: function(element) {
 			return element.is(this.selector);
