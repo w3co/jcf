@@ -163,15 +163,13 @@
 				e.pointerType = origEvent.type.substr(0, 5); // "mouse" or "touch" word length
 			}
 
-			if (!e.pageX && !e.pageY) {
-				touchEventData = origEvent.changedTouches ? origEvent.changedTouches[0] : origEvent;
-				e.pageX = touchEventData.pageX;
-				e.pageY = touchEventData.pageY;
-			}
-
-			if (origEvent.type === 'touchend') {
-				lastTouch = { x: e.pageX, y: e.pageY };
-			}
+      if (origEvent.type === 'touchend') {
+        touchEventData = origEvent.changedTouches ? origEvent.changedTouches[0] : origEvent;
+        e.pageX = touchEventData.pageX;
+        e.pageY = touchEventData.pageY;
+        lastTouch = { x: e.pageX, y: e.pageY };
+      }
+      
 			if (e.pointerType === 'mouse' && lastTouch && mouseEventSimulated(e)) {
 				return;
 			} else {
